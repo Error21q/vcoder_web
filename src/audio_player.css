@@ -1,0 +1,90 @@
+/* Base Colors */
+:root {
+  --primary-color: #0b6bcb; /* Main color for active elements */
+  --primary-light-color: #66a9e8; /* Lighter version for hover effects */
+  --neutral-color: #e0e0e0; /* Neutral background for unfilled areas */
+  --text-color: #000000; /* Black text for better readability */
+  --background-color: #f8f8f8; /* Light background for the player */
+}
+
+/* General Player Background */
+.rhap_container {
+  background-color: transparent; /* Transparent background */
+  box-shadow: none; /* Subtle shadow */
+}
+
+/* Play/Pause Button */
+.rhap_play-pause-button {
+  color: var(--primary-color); /* Main color for play/pause icon */
+}
+
+/* Seek Bar */
+.rhap_progress-bar {
+  background-color: var(--neutral-color); /* Background for unfilled progress */
+}
+
+.rhap_progress-filled {
+  background-color: var(--primary-color); /* Filled progress bar color */
+}
+
+.rhap_progress-indicator {
+  background-color: var(--primary-color); /* Seek indicator color */
+  border: 1px solid var(--primary-light-color); /* Light border for better contrast */
+}
+
+/* Volume Controls */
+.rhap_volume-bar {
+  background-color: var(
+    --neutral-color
+  ) !important; /* Neutral background for volume bar */
+}
+
+.rhap_volume-filled {
+  background-color: var(--primary-color) !important; /* Filled volume level */
+}
+
+.rhap_volume-indicator {
+  background-color: var(--primary-color) !important; /* Volume knob color */
+  border: 2px solid var(--primary-light-color); /* Light border for knob */
+}
+
+/* Hover Effects */
+.rhap_progress-indicator:hover,
+.rhap_volume-indicator:hover {
+  background-color: var(--primary-light-color); /* Lighter color on hover */
+  cursor: pointer;
+}
+
+/* Main Control Buttons (Play/Pause, Skip, etc.) */
+.rhap_main-controls-button {
+  color: var(--primary-color); /* Color for control buttons */
+}
+
+/* Additional Controls (e.g., loop, download) */
+.rhap_additional-controls button {
+  color: var(--primary-color); /* Color for additional buttons */
+}
+
+/* Time Labels */
+.rhap_time {
+  color: var(--text-color); /* Black text for time labels */
+}
+
+/* Loop and Download Buttons */
+.rhap_repeat-button,
+.rhap_download-progress {
+  color: var(--primary-color); /* Active color for loop and download buttons */
+}
+
+/* Focus/Active States */
+.rhap_play-pause-button:focus,
+.rhap_volume-indicator:focus,
+.rhap_progress-indicator:focus {
+  outline: 2px solid var(--primary-light-color); /* Focus outline for accessibility */
+}
+
+/* Additional Text Visibility */
+.rhap_volume-container,
+.rhap_controls-section {
+  color: var(--text-color); /* Black text for labels */
+}
