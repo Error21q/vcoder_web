@@ -169,7 +169,17 @@ export const HomePage = () => {
         alignItems={"center"}
         gap={2}
       >
-        <Typography level="h2">Smart Contracts</Typography>
+        <Button
+          onClick={() => {
+            setOpenTrackModal(true);
+          }}
+          variant="outlined"
+          color="primary"
+          size="lg"
+          startDecorator={<FindReplaceOutlined />}
+        >
+          Track booking
+        </Button>
 
         <Grid
           container
@@ -178,18 +188,6 @@ export const HomePage = () => {
           alignItems={"center"}
           gap={2}
         >
-          <Button
-            onClick={() => {
-              setOpenTrackModal(true);
-            }}
-            variant="outlined"
-            color="primary"
-            size="lg"
-            startDecorator={<FindReplaceOutlined />}
-          >
-            Track booking
-          </Button>
-
           <ToggleButtonGroup
             size="sm"
             value={toggleBtn}
