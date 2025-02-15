@@ -163,11 +163,15 @@ export const HomePage = () => {
     <Box p={2} bgcolor={"#010314"}>
       <Grid
         container
-        py={5}
+        py={2.5}
         display={"flex"}
         justifyContent={"space-between"}
         alignItems={"center"}
         gap={2}
+        position={"sticky"}
+        top={0}
+        zIndex={1000}
+        bgcolor={"#010314"}
       >
         <Button
           onClick={() => {
@@ -288,6 +292,7 @@ export const HomePage = () => {
         open={openModal}
         loading={loading}
         showError={showError}
+        selectedProduct={selectedProduct}
         onClose={() => {
           setShowError(false);
           setSelectedProduct(ProductInitialValues);

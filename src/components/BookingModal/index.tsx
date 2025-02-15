@@ -14,7 +14,6 @@ import {
 } from "@mui/joy";
 import Form from "../Form";
 import { BookingInitialValues } from "../../common/form-values";
-import { BookingValidationSchema } from "../../common/form-schema";
 import { BookingInputFields } from "../../common/form-fields";
 import { useRef, useState } from "react";
 import { FormikProps } from "formik";
@@ -22,17 +21,21 @@ import { IBooking } from "../../interfaces/booking";
 import { ErrorOutlined } from "@mui/icons-material";
 import AudioPlayer from "react-h5-audio-player";
 import AudioRecorder from "../AudioRecorder";
+import { getBookingValidationSchema } from "../../common/form-schema";
+import { IProduct } from "../../interfaces/product";
 
 interface BookingModalProps {
   open: boolean;
   loading?: boolean;
   showError?: boolean;
+  selectedProduct: IProduct;
   onClose: () => void;
   onSubmit: (values: IBooking, audioFile: File) => void;
 }
 
 const BookingModal = (props: BookingModalProps) => {
-  const { open, loading, showError, onClose, onSubmit } = props;
+  const { open, loading, showError, selectedProduct, onClose, onSubmit } =
+    props;
   const formikRef = useRef<FormikProps<any>>(null);
   const [audio, setAudio] = useState<File>();
 
@@ -51,17 +54,19 @@ const BookingModal = (props: BookingModalProps) => {
           onClose();
         }}
       >
-        <ModalDialog size="lg">
+        <ModalDialog layout="fullscreen" sx={{ m: 5, borderRadius: "lg" }}>
           <ModalClose />
           <DialogTitle>Book your smart contract </DialogTitle>
 
           <Divider />
 
-          <DialogContent>
+          <DialogContent sx={{ p: { md: 5 } }}>
             <Form
               formikRef={formikRef}
               initialValues={BookingInitialValues}
-              validationSchema={BookingValidationSchema}
+              validationSchema={getBookingValidationSchema(
+                selectedProduct.blockchain.currency
+              )}
               inputFields={BookingInputFields.slice(2)}
               onSubmit={(_) => _}
             />
@@ -103,10 +108,15 @@ const BookingModal = (props: BookingModalProps) => {
             </Alert>
           )}
 
-          <DialogActions buttonFlex={"1"} orientation="horizontal">
+          <DialogActions
+            buttonFlex={"0.1"}
+            orientation="horizontal"
+            sx={{ justifyContent: "center" }}
+          >
             <Button variant="outlined" color="neutral" onClick={onClose}>
               Cancel
             </Button>
+
             <Button
               variant="solid"
               color="primary"

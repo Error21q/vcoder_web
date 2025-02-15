@@ -1,5 +1,6 @@
 import * as yup from "yup";
 import { BookingStatusType } from "./booking-utils";
+import { validate } from "multicoin-address-validator";
 
 export const AuthValidationSchema = yup.object().shape({
   email: yup.string().required("Email is required"),
@@ -43,16 +44,25 @@ export const ProductValidationSchema = yup.object().shape({
     .moreThan(0, "Level must be greater than 0"),
 });
 
-export const BookingValidationSchema = yup.object().shape({
-  email_address: yup
-    .string()
-    .required("Email address is required")
-    .email("Invalid email address"),
-  wallet_address: yup.string().required("Wallet address is required"),
-  whatsapp_number: yup.string().required("WhatsApp number is required"),
-  product: yup.object().required("Product is required"),
-  status: yup.string().required("Status is required"),
-});
+export const getBookingValidationSchema = (currency?: string) => {  
+  return yup.object().shape({
+    email_address: yup
+      .string()
+      .required("Email address is required")
+      .email("Invalid email address"),
+    wallet_address: yup
+      .string()
+      .required("Wallet address is required")
+      .test(
+        "is-valid-wallet-address",
+        "Invalid wallet address",
+        (value) => !!value && validate(value, currency?.toLowerCase())
+      ),
+    whatsapp_number: yup.string().required("WhatsApp number is required"),
+    product: yup.object().required("Product is required"),
+    status: yup.string().required("Status is required"),
+  });
+};
 
 export const getDynamicBookingActionValidationSchema = (
   status: BookingStatusType

@@ -10,7 +10,6 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { FormikProps } from "formik";
 import { BookingInitialValues } from "../../common/form-values";
-import { BookingValidationSchema } from "../../common/form-schema";
 import { showSnackbar } from "../../components/SnackbarUtils";
 import { CheckOutlined } from "@mui/icons-material";
 import { Form } from "../../components";
@@ -21,6 +20,7 @@ import { saveBooking } from "../../api/bookings";
 import { IProduct } from "../../interfaces/product";
 import { getProducts } from "../../api/products";
 import { BookingStatuses } from "../../common/booking-utils";
+import { getBookingValidationSchema } from "../../common/form-schema";
 
 export const ManageBooking = () => {
   const navigate = useNavigate();
@@ -28,6 +28,7 @@ export const ManageBooking = () => {
   const formikRef = useRef<FormikProps<any>>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [products, setProducts] = useState<IProduct[]>();
+  const [selectedProduct, setSelectedProduct] = useState<IProduct>();
 
   const onProductSearch = async (value: string) => {
     try {
@@ -88,12 +89,17 @@ export const ManageBooking = () => {
             <Form
               formikRef={formikRef}
               initialValues={rowData || BookingInitialValues}
-              validationSchema={BookingValidationSchema}
+              validationSchema={getBookingValidationSchema(
+                selectedProduct?.blockchain?.currency
+              )}
               inputFields={BookingInputFields}
               statuses={BookingStatuses}
               products={products}
               onSubmit={(_) => _}
               onSearch={onProductSearch}
+              onProductSelect={(product: IProduct | undefined) => {
+                setSelectedProduct(product);
+              }}
             />
           </Box>
         </CardContent>
@@ -109,6 +115,7 @@ export const ManageBooking = () => {
             >
               Back
             </Button>
+
             <Button
               variant="solid"
               color="primary"

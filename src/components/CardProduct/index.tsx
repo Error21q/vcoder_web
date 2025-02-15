@@ -119,14 +119,13 @@ const CardProduct = (props: CardProductProps) => {
       <CardOverflow sx={{ p: 0 }}>
         <CardActions buttonFlex="1" sx={{ px: 1, py: 1 }}>
           <Button
-            variant="soft"
-            color="danger"
             onClick={() => {
               onBook?.();
             }}
           >
-            Book
+            Book Now
           </Button>
+
           <Button
             variant="soft"
             color="primary"
@@ -135,7 +134,7 @@ const CardProduct = (props: CardProductProps) => {
               window.open(product.url, "_blank");
             }}
           >
-            Demo
+            View Demo
           </Button>
         </CardActions>
       </CardOverflow>

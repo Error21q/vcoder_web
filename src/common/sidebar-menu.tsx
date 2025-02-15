@@ -12,6 +12,7 @@ export interface ISidebarMenu {
   title: string;
   route: string;
   icon: any;
+  newTab?: boolean;
 }
 
 export const SidebarMenu: ISidebarMenu[] = [
@@ -20,6 +21,7 @@ export const SidebarMenu: ISidebarMenu[] = [
     title: "Home/Site",
     route: "/",
     icon: <LanguageOutlined />,
+    newTab: true,
   },
   {
     id: 2,

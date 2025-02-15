@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "react-h5-audio-player/lib/styles.css";
 import "./audio_player.css";
 import { useColorScheme } from "@mui/joy/styles";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { Layout } from "./components";
 import {
   BlockchainsPage,
@@ -22,15 +22,12 @@ import {
 import { ConfigProvider, theme } from "antd";
 
 const Navigation: React.FC = () => {
+  const location = useLocation();
   const { mode, setMode } = useColorScheme();
 
-  React.useEffect(() => {
-    if (location.pathname === "/login") {
-      setMode("light");
-    } else if (location.pathname === "/") {
+  useEffect(() => {
+    if (location.pathname === "/") {
       setMode("dark");
-    } else {
-      setMode("system"); // Fallback to system preference for other routes
     }
   }, [location.pathname, setMode]);
 

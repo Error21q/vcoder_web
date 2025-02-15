@@ -22,6 +22,7 @@ interface FormProps {
   inputFields: IForm[];
   onSubmit: (values: any) => void;
   onSearch?: (value: any) => void;
+  onProductSelect?: (value: IProduct | undefined) => void;
   statuses?: any[];
   products?: IProduct[] | undefined;
   blockchain?: IBlockchain[] | undefined;
@@ -37,6 +38,7 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
     inputFields,
     onSubmit,
     onSearch,
+    onProductSelect,
     statuses,
     products,
     blockchain,
@@ -97,6 +99,7 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
                           const selectedItem = products?.find(
                             (item: any) => item.id === newValue?.value
                           );
+                          onProductSelect?.(selectedItem);
                           setFieldValue(field.name, selectedItem || null);
                         }}
                         options={products?.map((item: IProduct) => ({

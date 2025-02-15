@@ -59,8 +59,7 @@ const useColumns = (infoUrl?: string): TableColumnsType<IBooking> => {
       dataIndex: "audio",
       key: "audio",
       render(value) {
-        const audio: string = import.meta.env.VITE_AUDIO_BASE_URL + value;
-        return <AudioPlayer src={audio} />;
+        return <AudioPlayer src={value} />;
       },
     },
     {

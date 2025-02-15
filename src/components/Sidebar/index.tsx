@@ -36,7 +36,9 @@ const Sidebar = (props: SidebarProps) => {
                 selected={location.pathname === item.route}
                 onClick={() => {
                   closeSidebar();
-                  navigate(item.route);
+                  item.newTab
+                    ? window.open(item.route, "_blank")
+                    : navigate(item.route);
                 }}
               >
                 {item.icon}

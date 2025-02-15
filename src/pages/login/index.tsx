@@ -1,6 +1,13 @@
 import { login } from "../../api/auth";
 import { Form } from "../../components";
-import { Button, Card, Grid, Stack, Typography } from "@mui/joy";
+import {
+  Button,
+  Card,
+  Grid,
+  Stack,
+  Typography,
+  useColorScheme,
+} from "@mui/joy";
 import {
   CheckCircleOutlined,
   ErrorOutline,
@@ -16,8 +23,8 @@ import { FormikProps } from "formik";
 import { IAuth } from "../../interfaces/auth";
 
 export const LoginPage = () => {
-  localStorage.setItem("joy-mode", "light")
   const navigate = useNavigate();
+  const { mode } = useColorScheme();
   const formikRef = useRef<FormikProps<any>>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const access_token: string | null = localStorage.getItem("access_token");
@@ -65,7 +72,7 @@ export const LoginPage = () => {
   return (
     <Grid
       container
-      bgcolor={"#fffdfd"}
+      bgcolor={mode == "light" ? "#fff1f3" : ""}
       sx={{ flexGrow: 1 }}
       justifyContent="center"
       alignItems="center"
