@@ -13,7 +13,7 @@ import {
   TrackingModal,
 } from "../../components";
 import { useEffect, useState } from "react";
-import { IProduct } from "../../interfaces/product";
+import { IProduct, IProductFilter } from "../../interfaces/product";
 import { getProduct, getProducts } from "../../api/products";
 import { IPaginate, IPagination } from "../../interfaces/pagination";
 import { IBlockchain } from "../../interfaces/blockchain";
@@ -64,7 +64,7 @@ export const HomePage = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const filters = {
+      const filters: IProductFilter = {
         blockchainId: Number(toggleBtn),
         status: "available",
       };
