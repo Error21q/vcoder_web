@@ -32,6 +32,10 @@ const CardProduct = (props: CardProductProps) => {
             src={product.image}
             loading="lazy"
             alt="product-image"
+            style={{
+              objectFit: "cover",
+              objectPosition: "top center",
+            }}
             preview={{
               toolbarRender: (_, __) => <></>,
               styles: {
@@ -129,7 +133,7 @@ const CardProduct = (props: CardProductProps) => {
           <Button
             variant="soft"
             color="primary"
-            endDecorator={<Launch />}
+            startDecorator={<Launch />}
             onClick={() => {
               window.open(product.url, "_blank");
             }}

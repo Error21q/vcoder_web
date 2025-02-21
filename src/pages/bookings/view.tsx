@@ -13,8 +13,8 @@ import {
 } from "../../common/booking-utils";
 
 export const ViewBooking = () => {
-  const columns = useColumns();
   const booking: IBooking = useLocation().state;
+  const columns = useColumns("", booking.product);
   const productInfoObject: IProductInfo[] = getProductInfoObject(
     booking.product
   );

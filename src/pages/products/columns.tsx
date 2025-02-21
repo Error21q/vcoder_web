@@ -4,6 +4,7 @@ import moment from "moment";
 import { Launch } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { IBooking } from "../../interfaces/booking";
+import { ProductStatuses } from "../../common/product-utils";
 
 const useColumns = (infoUrl?: string): TableColumnsType<IBooking> => {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ const useColumns = (infoUrl?: string): TableColumnsType<IBooking> => {
       },
     },
     {
-      title: "URL",
+      title: "Demo URL",
       width: 200,
       dataIndex: "url",
       key: "url",
@@ -50,7 +51,7 @@ const useColumns = (infoUrl?: string): TableColumnsType<IBooking> => {
           <Link
             href={value}
             slotProps={{ root: { target: "_blank" } }}
-            endDecorator={<Launch />}
+            startDecorator={<Launch />}
             level="body-sm"
           >
             {value}
@@ -99,6 +100,7 @@ const useColumns = (infoUrl?: string): TableColumnsType<IBooking> => {
             size="sm"
             variant="soft"
             sx={{ textTransform: "uppercase", borderRadius: "sm" }}
+            startDecorator={ProductStatuses.find((i) => i.value == value)?.icon}
           >
             {value}
           </Chip>
@@ -110,18 +112,18 @@ const useColumns = (infoUrl?: string): TableColumnsType<IBooking> => {
       width: 200,
       dataIndex: "booking.status",
       key: "booking.status",
-      render(value) {
-        const is_delivered = value?.find(
+      render(_, record: any) {
+        const isDelivered = record?.bookings?.find(
           (item: any) => item.status == "delivered"
         );
         return (
           <Chip
-            color={is_delivered ? "success" : "danger"}
+            color={isDelivered ? "success" : "danger"}
             size="sm"
             variant="soft"
             sx={{ textTransform: "uppercase", borderRadius: "sm" }}
           >
-            {is_delivered ? "YES" : "NO"}
+            {isDelivered ? "YES" : "NO"}
           </Chip>
         );
       },

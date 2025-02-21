@@ -30,7 +30,10 @@ const Sidebar = (props: SidebarProps) => {
       <Box sx={{}}>
         <List sx={styles.list}>
           {sidebarMenu.map((item) => (
-            <ListItem key={item.id}>
+            <ListItem
+              key={item.id}
+              sx={{ display: item.hide ? "none" : "block" }}
+            >
               <ListItemButton
                 sx={{ py: 1 }}
                 selected={location.pathname === item.route}

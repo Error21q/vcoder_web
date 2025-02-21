@@ -30,9 +30,11 @@ import { FormikProps } from "formik";
 import { BookingActionInitialValues } from "../../common/form-values";
 import { getDynamicBookingActionValidationSchema } from "../../common/form-schema";
 import { BookingActionInputFields } from "../../common/form-fields";
+import { UserRole, useUserRole } from "../../common/auth-utils";
 
 export const BookingsPage = () => {
   const navigate = useNavigate();
+  const userRole = useUserRole();
   const columns = useColumns();
   const formikRef = useRef<FormikProps<any>>(null);
   const [search, setSearch] = useState<string>("");
@@ -62,7 +64,13 @@ export const BookingsPage = () => {
     width: "var(--Table-lastColumnWidth)",
     render: (_: any, record: IBooking) => (
       <Box sx={{ display: "flex", gap: 1 }}>
-        <Box display={record.status != "approved" ? "unset" : "none"}>
+        <Box
+          display={
+            record.status != "approved" && record.status != "delivered"
+              ? "unset"
+              : "none"
+          }
+        >
           <Tooltip title="Approve" variant="outlined" color="success" arrow>
             <IconButton
               size="sm"
@@ -120,7 +128,13 @@ export const BookingsPage = () => {
           </Tooltip>
         </Box>
 
-        <Box display={record.status != "delivered" ? "unset" : "none"}>
+        <Box
+          display={
+            userRole !== UserRole.MANAGER && record.status != "delivered"
+              ? "unset"
+              : "none"
+          }
+        >
           <Tooltip title="Deliver" variant="outlined" color="primary" arrow>
             <IconButton
               size="sm"
@@ -146,34 +160,36 @@ export const BookingsPage = () => {
           </Tooltip>
         </Box>
 
-        <Divider orientation="vertical" />
+        {userRole !== UserRole.MANAGER && <Divider orientation="vertical" />}
 
-        <Tooltip title="Edit item" variant="outlined" color="primary" arrow>
-          <IconButton
-            size="sm"
-            color="primary"
-            onClick={() => {
-              navigate("manage", { state: record });
-            }}
-          >
-            <EditOutlined />
-          </IconButton>
-        </Tooltip>
+        <Box display={userRole === UserRole.MANAGER ? "none" : "block"}>
+          <Tooltip title="Edit item" variant="outlined" color="primary" arrow>
+            <IconButton
+              size="sm"
+              color="primary"
+              onClick={() => {
+                navigate("manage", { state: record });
+              }}
+            >
+              <EditOutlined />
+            </IconButton>
+          </Tooltip>
 
-        <Tooltip title="Remove item" variant="outlined" color="danger" arrow>
-          <IconButton
-            size="sm"
-            color="danger"
-            onClick={() => {
-              setAlertConfirm({
-                onClick: () => onDelete(record),
-              });
-              setShowAlert(true);
-            }}
-          >
-            <DeleteOutlined />
-          </IconButton>
-        </Tooltip>
+          <Tooltip title="Remove item" variant="outlined" color="danger" arrow>
+            <IconButton
+              size="sm"
+              color="danger"
+              onClick={() => {
+                setAlertConfirm({
+                  onClick: () => onDelete(record),
+                });
+                setShowAlert(true);
+              }}
+            >
+              <DeleteOutlined />
+            </IconButton>
+          </Tooltip>
+        </Box>
       </Box>
     ),
   };
@@ -253,6 +269,7 @@ export const BookingsPage = () => {
       <DataTableHead
         title="Bookings"
         btnText="Add New"
+        disabled={userRole === UserRole.MANAGER}
         onClick={() => {
           navigate("manage");
         }}
@@ -325,6 +342,7 @@ export const BookingsPage = () => {
                     : BookingActionInputFields
                 }
                 onSubmit={(_) => _}
+                fullWidth
               />
             </Box>
           )

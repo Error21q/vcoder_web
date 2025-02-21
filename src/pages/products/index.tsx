@@ -8,23 +8,27 @@ import {
 import { useEffect, useState } from "react";
 import { IPaginate, IPagination } from "../../interfaces/pagination";
 import {
+  Cancel,
+  CheckCircle,
   CheckOutlined,
   DeleteOutlined,
   EditOutlined,
-  ToggleOff,
-  ToggleOn,
 } from "@mui/icons-material";
 import { getProducts, removeProduct, saveProduct } from "../../api/products";
-import { IProduct } from "../../interfaces/product";
+import { IProduct, IProductFilter } from "../../interfaces/product";
 import { useNavigate } from "react-router-dom";
 import { showSnackbar } from "../../components/SnackbarUtils";
 import useColumns from "./columns";
 import Filters from "./filters";
+import {
+  ProductFilterValues,
+  ProductStatusType,
+} from "../../common/product-utils";
 
 export const ProductsPage = () => {
   const navigate = useNavigate();
   const columns = useColumns();
-  const [filter, setFilter] = useState<string>("");
+  const [filter, setFilter] = useState<IProductFilter>(ProductFilterValues);
   const [search, setSearch] = useState<string>("");
   const [rows, setRows] = useState<IProduct[]>([]);
   const [row, setRow] = useState<IProduct>();
@@ -52,16 +56,16 @@ export const ProductsPage = () => {
         <Tooltip
           title={
             record.status == "available"
-              ? "Mark as unavailable"
-              : "Mark as available"
+              ? "Mark as Not available"
+              : "Mark as Available"
           }
           variant="outlined"
-          color="primary"
+          color={record.status == "available" ? "danger" : "success"}
           arrow
         >
           <IconButton
             size="sm"
-            color="primary"
+            color={record.status == "available" ? "danger" : "success"}
             onClick={() => {
               let payload: IProduct = record;
               payload.status =
@@ -69,7 +73,7 @@ export const ProductsPage = () => {
               onStatusUpdate(payload);
             }}
           >
-            {record.status == "available" ? <ToggleOff /> : <ToggleOn />}
+            {record.status == "available" ? <Cancel /> : <CheckCircle />}
           </IconButton>
         </Tooltip>
 
@@ -111,7 +115,7 @@ export const ProductsPage = () => {
         paginate.page,
         paginate.limit,
         sort,
-        { status: filter }
+        filter
       );
       setRows(response.data);
       setPagination(response.pagination);
@@ -174,17 +178,26 @@ export const ProductsPage = () => {
       />
 
       <Grid container spacing={2} py={2} display={"flex"} flexWrap={"wrap"}>
-        <Grid xs={12} md={10}>
+        <Grid xs={12} md={8}>
           <SearchBar
             placeholder="Search by name or url"
             value={search}
             onChange={(text: string) => setSearch(text)}
           />
         </Grid>
-        <Grid xs={12} md={2}>
+        <Grid xs={12} md={4}>
           <Filters
-            onChange={(text: string | null) => {
-              setFilter(!text ? "" : text);
+            onStatusChange={(text: ProductStatusType | null) => {
+              setFilter((prevFilter) => ({
+                ...prevFilter,
+                status: text ?? undefined, // Ensuring it's of the correct type
+              }));
+            }}
+            onBlockchainChange={(blockchainId: number | null) => {
+              setFilter((prevFilter) => ({
+                ...prevFilter,
+                blockchainId: blockchainId ?? undefined, // Ensuring type matches
+              }));
             }}
           />
         </Grid>

@@ -5,6 +5,7 @@ import Footer from "./Footer";
 import Layout from "./Layout";
 import SearchBar from "./SearchBar";
 import DebounceInput from "./DebounceInput";
+import PhoneInput from "./PhoneInput";
 import DataTable from "./DataTable";
 import Form from "./Form";
 import CardProduct from "./CardProduct";
@@ -30,6 +31,7 @@ export {
   Form,
   SearchBar,
   DebounceInput,
+  PhoneInput,
   DataTable,
   CardProduct,
   CardSummary,

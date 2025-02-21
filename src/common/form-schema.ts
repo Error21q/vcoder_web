@@ -3,7 +3,7 @@ import { BookingStatusType } from "./booking-utils";
 import { validate } from "multicoin-address-validator";
 
 export const AuthValidationSchema = yup.object().shape({
-  email: yup.string().required("Email is required"),
+  username: yup.string().required("Username is required"),
   password: yup.string().required("Password is required"),
 });
 

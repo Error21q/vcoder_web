@@ -1,5 +1,5 @@
 import moment from "moment";
-import { IProduct, IProductInfo } from "../interfaces/product";
+import { IProduct, IProductFilter, IProductInfo } from "../interfaces/product";
 import { Avatar, Chip, Link, Typography } from "@mui/joy";
 import {
   CancelOutlined,
@@ -24,6 +24,11 @@ export const ProductStatuses = [
   },
 ];
 
+export const ProductFilterValues: IProductFilter = {
+  blockchainId: undefined,
+  status: undefined,
+};
+
 export const getProductInfoObject = (product: IProduct) => {
   const productInfo: IProductInfo[] = [
     {
@@ -32,7 +37,7 @@ export const getProductInfoObject = (product: IProduct) => {
         <Link
           href={product.url}
           slotProps={{ root: { target: "_blank" } }}
-          endDecorator={<Launch />}
+          startDecorator={<Launch />}
           level="body-sm"
         >
           {product.url}
@@ -47,6 +52,9 @@ export const getProductInfoObject = (product: IProduct) => {
           size="sm"
           variant="soft"
           sx={{ textTransform: "uppercase", borderRadius: "sm" }}
+          startDecorator={
+            ProductStatuses.find((i) => i.value == product.status)?.icon
+          }
         >
           {product.status}
         </Chip>

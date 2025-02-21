@@ -1,7 +1,7 @@
 import { IForm } from "../interfaces/form";
 
 export const AuthInputFields: IForm[] = [
-  { name: "email", label: "Email", type: "text", required: true },
+  { name: "username", label: "Username", type: "text", required: true },
   { name: "password", label: "Password", type: "password", required: true },
 ];
 
@@ -18,7 +18,7 @@ export const BlockChainInputFields: IForm[] = [
 
 export const ProductInputFields: IForm[] = [
   { name: "name", label: "Name", type: "text", required: true },
-  { name: "url", label: "URL", type: "text", required: true },
+  { name: "url", label: "Demo URL", type: "text", required: true },
   { name: "roi", label: "ROI", type: "number", required: true },
   { name: "commission", label: "Commission", type: "number", required: true },
   { name: "level", label: "Level", type: "number", required: true },

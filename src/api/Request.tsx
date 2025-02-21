@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getAccessToken } from "../common/api-utils";
+import { getAccessToken } from "../common/auth-utils";
 import { showSnackbar } from "../components/SnackbarUtils";
 import { ErrorOutline } from "@mui/icons-material";
 
@@ -29,23 +29,31 @@ Request.interceptors.response.use(
   },
   (error) => {
     const status = error.response?.status;
-    const errorMessage =
-      error?.response?.data?.error?.message || "Something went wrong";
+    const errorMessage = error?.response?.data?.error?.message;
 
-    if (status === 401) {
-      // handle 401 error (e.g., token expiration, etc.)
-      // For example, you can redirect the user to login page or show a specific message
-    }
-
-    // Show a toast for error responses like 400, 500, etc.
+    // handle errors between status code 400 to 600.
     if (status >= 400 && status < 600) {
-      showSnackbar({
-        message: errorMessage,
-        color: "danger",
-        size: "lg",
-        open: true,
-        startDecorator: <ErrorOutline />,
-      });
+      // handle 401 error (e.g., token expiration, etc.)
+      if (status === 401 && !errorMessage) {
+        localStorage.removeItem("access_token");
+        showSnackbar({
+          message: "Session expired. Please log in again.",
+          color: "danger",
+          size: "lg",
+          open: true,
+          startDecorator: <ErrorOutline />,
+        });
+      }
+      //Show a toast for error responses like 400, 500, etc.
+      else {
+        showSnackbar({
+          message: errorMessage || "Something went wrong",
+          color: "danger",
+          size: "lg",
+          open: true,
+          startDecorator: <ErrorOutline />,
+        });
+      }
     }
 
     return Promise.reject(error);

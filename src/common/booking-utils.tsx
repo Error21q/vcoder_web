@@ -128,6 +128,9 @@ export const getBookingInfoLeftContent = (booking: IBooking) => {
           size="sm"
           variant="soft"
           sx={{ textTransform: "uppercase", borderRadius: "sm" }}
+          startDecorator={
+            BookingStatuses.find((i) => i.value == booking.status)?.icon
+          }
         >
           {booking.status}
         </Chip>

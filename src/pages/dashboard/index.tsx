@@ -26,8 +26,10 @@ import {
   BookingStatusColor,
   BookingStatusType,
 } from "../../common/booking-utils";
+import { UserRole, useUserRole } from "../../common/auth-utils";
 
 export const DashboardPage = () => {
+  const userRole = useUserRole();
   const [loading, setLoading] = useState<boolean>(false);
   const [bookings, setBookings] = useState<IBooking[]>([]);
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -88,8 +90,8 @@ export const DashboardPage = () => {
           }}
         >
           <img
-            src="/src/assets/bg.png"
-            srcSet="/src/assets/bg.png"
+            src="/header_bg.png"
+            srcSet="/header_bg.png"
             loading="lazy"
             alt="background-image"
           />
@@ -105,11 +107,12 @@ export const DashboardPage = () => {
       <CardSummary data={bookingSummary} />
 
       <Grid container spacing={2} py={2}>
-        {DashboardStats.map((card) => (
-          <Grid key={card.id} xs={12} sm={6} md={3}>
-            <CardClickable {...card} />
-          </Grid>
-        ))}
+        {userRole === UserRole.ADMIN &&
+          DashboardStats.map((card) => (
+            <Grid key={card.id} xs={12} sm={6} md={3}>
+              <CardClickable {...card} />
+            </Grid>
+          ))}
       </Grid>
 
       <Grid container spacing={2}>
@@ -135,7 +138,7 @@ export const DashboardPage = () => {
 
                         <Typography level="body-sm" mx={1}>
                           {moment(item.updated_at).format(
-                            import.meta.env.VITE_TIME_STAMP,
+                            import.meta.env.VITE_TIME_STAMP
                           )}
                         </Typography>
                       </Box>
@@ -188,7 +191,7 @@ export const DashboardPage = () => {
 
                         <Typography level="body-sm" mx={1}>
                           {moment(item.updated_at).format(
-                            import.meta.env.VITE_TIME_STAMP,
+                            import.meta.env.VITE_TIME_STAMP
                           )}
                         </Typography>
                       </Box>

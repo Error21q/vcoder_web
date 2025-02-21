@@ -56,7 +56,11 @@ const BookingModal = (props: BookingModalProps) => {
       >
         <ModalDialog layout="fullscreen" sx={{ m: 5, borderRadius: "lg" }}>
           <ModalClose />
-          <DialogTitle>Book your smart contract </DialogTitle>
+          <DialogTitle>
+            Book
+            <Typography fontStyle={"italic"}>{selectedProduct.name}</Typography>
+            smart contract
+          </DialogTitle>
 
           <Divider />
 

@@ -49,7 +49,15 @@ const ProductInfo = (props: ProductInfoProps) => {
 
           <Grid xs={12} sm={12} md={6}>
             <AspectRatio variant="plain">
-              <Image placeholder src={product?.image} alt="product-image" />
+              <Image
+                placeholder
+                src={product?.image}
+                alt="product-image"
+                style={{
+                  objectFit: "cover",
+                  objectPosition: "top center",
+                }}
+              />
             </AspectRatio>
           </Grid>
         </Grid>

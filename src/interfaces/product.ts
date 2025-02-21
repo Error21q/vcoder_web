@@ -23,3 +23,8 @@ export interface IProductInfo {
   title: React.ReactNode | number | string | undefined;
   value: React.ReactNode | number | string | undefined;
 }
+
+export interface IProductFilter {
+  blockchainId?: number;
+  status?: ProductStatusType;
+}

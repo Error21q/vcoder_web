@@ -6,8 +6,8 @@ import useColumns from "../bookings/columns";
 import { getProductInfoObject } from "../../common/product-utils";
 
 export const ViewProduct = () => {
-  const columns = useColumns("/admin/bookings/view")
   const product: IProduct = useLocation().state;
+  const columns = useColumns("/admin/bookings/view", product);
   const productInfoObject: IProductInfo[] = getProductInfoObject(product);
 
   return (

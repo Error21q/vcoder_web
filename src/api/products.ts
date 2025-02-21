@@ -1,4 +1,4 @@
-import { IProduct } from "../interfaces/product";
+import { IProduct, IProductFilter } from "../interfaces/product";
 import Request from "./Request";
 
 export const getProducts = async (
@@ -6,7 +6,7 @@ export const getProducts = async (
   page?: number,
   limit?: number,
   sort?: string,
-  filters?: { blockchainId?: number; status?: string }
+  filters?: IProductFilter
 ) => {
   try {
     let url: string = import.meta.env.VITE_API_PRODUCT + "?";

@@ -23,8 +23,10 @@ import {
   LogoutOutlined,
 } from "@mui/icons-material";
 import { showSnackbar } from "../SnackbarUtils";
+import { useUserRole } from "../../common/auth-utils";
 
 const Header = () => {
+  const userRole = useUserRole();
   const navigate = useNavigate();
   const onLogout = () => {
     logout();
@@ -74,13 +76,10 @@ const Header = () => {
           >
             <MenuItem>
               <Box sx={{ display: "flex", alignItems: "center" }}>
-                <Avatar>SA</Avatar>
+                <Avatar />
                 <Box sx={{ ml: 1.5 }}>
                   <Typography level="title-sm" textColor="text.primary">
-                    Super Admin
-                  </Typography>
-                  <Typography level="body-xs" textColor="text.tertiary">
-                    admin@gmail.com
+                    {userRole}
                   </Typography>
                 </Box>
               </Box>

@@ -5,7 +5,7 @@ import { IProduct } from "../interfaces/product";
 import { IAuth } from "../interfaces/auth";
 
 export const AuthInitialValues: IAuth = {
-  email: "",
+  username: "",
   password: "",
 };
 

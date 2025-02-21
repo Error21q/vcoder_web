@@ -20,14 +20,16 @@ import {
   HomePage,
 } from "./pages";
 import { ConfigProvider, theme } from "antd";
+import { UserRole, useUserRole } from "./common/auth-utils";
 
 const Navigation: React.FC = () => {
   const location = useLocation();
+  const userRole = useUserRole();
   const { mode, setMode } = useColorScheme();
 
   useEffect(() => {
     if (location.pathname === "/") {
-      setMode("dark");
+      // setMode("dark");
     }
   }, [location.pathname, setMode]);
 
@@ -44,16 +46,26 @@ const Navigation: React.FC = () => {
         <Route path="/admin" element={<Layout />}>
           <Route index element={<Navigate to="dashboard" />} />
           <Route path="dashboard" element={<DashboardPage />} />
-          <Route path="products" element={<ProductsPage />} />
-          <Route path="products/manage" element={<ManageProduct />} />
-          <Route path="products/view" element={<ViewProduct />} />
+
           <Route path="bookings" element={<BookingsPage />} />
           <Route path="bookings/manage" element={<ManageBooking />} />
           <Route path="bookings/view" element={<ViewBooking />} />
-          <Route path="categories" element={<CategoriesPage />} />
-          <Route path="categories/manage" element={<ManageCategory />} />
-          <Route path="blockchains" element={<BlockchainsPage />} />
-          <Route path="blockchains/manage" element={<ManageBlockchain />} />
+
+          {userRole === UserRole.MANAGER ? (
+            <Route path='*' element={<Navigate to='dashboard' />} />
+          ) : (
+            <>
+              <Route path="products" element={<ProductsPage />} />
+              <Route path="products/manage" element={<ManageProduct />} />
+              <Route path="products/view" element={<ViewProduct />} />
+
+              <Route path="categories" element={<CategoriesPage />} />
+              <Route path="categories/manage" element={<ManageCategory />} />
+
+              <Route path="blockchains" element={<BlockchainsPage />} />
+              <Route path="blockchains/manage" element={<ManageBlockchain />} />
+            </>
+          )}
         </Route>
       </Routes>
     </ConfigProvider>

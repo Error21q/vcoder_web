@@ -15,6 +15,7 @@ import { IBlockchain } from "../../interfaces/blockchain";
 import { ICategory } from "../../interfaces/category";
 import { IForm } from "../../interfaces/form";
 import { IProduct } from "../../interfaces/product";
+import PhoneInput from "../PhoneInput";
 
 interface FormProps {
   initialValues: any;
@@ -28,6 +29,7 @@ interface FormProps {
   blockchain?: IBlockchain[] | undefined;
   category?: ICategory[] | undefined;
   formikRef?: Ref<FormikProps<any>>;
+  fullWidth?: boolean;
 }
 
 const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
@@ -43,6 +45,7 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
     products,
     blockchain,
     category,
+    fullWidth,
   } = props;
 
   const getOptions = (fieldName: string) => {
@@ -77,7 +80,7 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
         <Box gap={3} flexDirection="column" display="flex">
           <Grid container spacing={3}>
             {inputFields.map((field: IForm) => (
-              <Grid key={field.name} xs={12} sm={12} md={6}>
+              <Grid key={field.name} xs={12} sm={12} md={fullWidth ? 12 : 6}>
                 <FormControl
                   required={field.required}
                   error={Boolean(touched[field.name] && errors[field.name])}
@@ -121,13 +124,9 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
                         value={values[field.name]}
                         defaultValue={values[field.name]}
                         onChange={(_, newValue) => {
-                          console.log("newValue", newValue);
-
                           const selectedItem = statuses?.find(
                             (item: any) => item.value === newValue
                           );
-                          console.log("selectedItem", selectedItem);
-
                           setFieldValue(
                             field.name,
                             selectedItem?.value || null
@@ -169,6 +168,26 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
                         ))}
                       </SelectJoyUI>
                     )
+                  ) : field.name === "whatsapp_number" ? (
+                    <PhoneInput
+                      required
+                      name={field.name}
+                      value={values[field.name]}
+                      selectedCountry={(country: any) => {
+                        console.log("countrycountry", country);
+                      }}
+                      onChange={(event) => {
+                        setFieldValue(field.name, event.target.value || null);
+                      }}
+                      onBlur={handleBlur}
+                      placeholder={field.placeholder}
+                      error={Boolean(
+                        !values[field.name] &&
+                          touched[field.name] &&
+                          errors[field.name]
+                      )}
+                      sx={{ boxShadow: "none", width: "100%" }}
+                    />
                   ) : (
                     <Input
                       type={field.type}

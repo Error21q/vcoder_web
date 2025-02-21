@@ -4,12 +4,18 @@ import moment from "moment";
 import { Chip, Link } from "@mui/joy";
 import {
   BookingStatusColor,
+  BookingStatuses,
   BookingStatusType,
 } from "../../common/booking-utils";
 import AudioPlayer from "react-h5-audio-player";
 import { useNavigate } from "react-router-dom";
+import { Launch } from "@mui/icons-material";
+import { IProduct } from "../../interfaces/product";
 
-const useColumns = (infoUrl?: string): TableColumnsType<IBooking> => {
+const useColumns = (
+  infoUrl?: string,
+  productInfo?: IProduct
+): TableColumnsType<IBooking> => {
   const navigate = useNavigate();
 
   const columns: TableColumnsType<IBooking> = [
@@ -42,6 +48,12 @@ const useColumns = (infoUrl?: string): TableColumnsType<IBooking> => {
       },
     },
     {
+      title: "WhatsApp Number",
+      width: 200,
+      dataIndex: "whatsapp_number",
+      key: "whatsapp_number",
+    },
+    {
       title: "Wallet Address",
       width: 200,
       dataIndex: "wallet_address",
@@ -53,45 +65,24 @@ const useColumns = (infoUrl?: string): TableColumnsType<IBooking> => {
       dataIndex: "email_address",
       key: "email_address",
     },
-    {
-      title: "Audio",
-      width: 400,
-      dataIndex: "audio",
-      key: "audio",
-      render(value) {
-        return <AudioPlayer src={value} />;
-      },
-    },
-    {
-      title: "Status",
-      width: 200,
-      dataIndex: "status",
-      key: "status",
-      render(value) {
-        return (
-          <Chip
-            color={BookingStatusColor[value as BookingStatusType]}
-            size="sm"
-            variant="soft"
-            sx={{ textTransform: "uppercase", borderRadius: "sm" }}
-          >
-            {value}
-          </Chip>
-        );
-      },
-    },
+
     {
       title: "Contract address",
       width: 200,
       dataIndex: "contract_address",
       key: "contract_address",
       render(value, record) {
+        const url: string =
+          record?.product?.blockchain?.url ||
+          productInfo?.blockchain?.url ||
+          "";
         return (
           <Link
-            href={record?.product?.blockchain?.url + value}
+            href={url + value}
             slotProps={{ root: { target: "_blank" } }}
             level="body-sm"
             variant="plain"
+            startDecorator={value && <Launch />}
           >
             {value}
           </Link>
@@ -110,12 +101,44 @@ const useColumns = (infoUrl?: string): TableColumnsType<IBooking> => {
             slotProps={{ root: { target: "_blank" } }}
             level="body-sm"
             variant="plain"
+            startDecorator={value && <Launch />}
           >
             {value}
           </Link>
         );
       },
     },
+
+    {
+      title: "Status",
+      width: 200,
+      dataIndex: "status",
+      key: "status",
+      render(value) {
+        return (
+          <Chip
+            color={BookingStatusColor[value as BookingStatusType]}
+            size="sm"
+            variant="soft"
+            sx={{ textTransform: "uppercase", borderRadius: "sm" }}
+            startDecorator={BookingStatuses.find((i) => i.value == value)?.icon}
+          >
+            {value}
+          </Chip>
+        );
+      },
+    },
+
+    {
+      title: "Audio",
+      width: 400,
+      dataIndex: "audio",
+      key: "audio",
+      render(value) {
+        return <AudioPlayer src={value} />;
+      },
+    },
+
     {
       title: "Created At",
       width: 200,
