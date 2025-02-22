@@ -1,6 +1,7 @@
 import * as yup from "yup";
 import { BookingStatusType } from "./booking-utils";
 import { validate } from "multicoin-address-validator";
+import { PhoneNumberUtil } from "google-libphonenumber";
 
 export const AuthValidationSchema = yup.object().shape({
   username: yup.string().required("Username is required"),
@@ -44,7 +45,10 @@ export const ProductValidationSchema = yup.object().shape({
     .moreThan(0, "Level must be greater than 0"),
 });
 
-export const getBookingValidationSchema = (currency?: string) => {  
+export const getBookingValidationSchema = (
+  currency?: string,
+  country_code?: string
+) => {
   return yup.object().shape({
     email_address: yup
       .string()
@@ -58,7 +62,18 @@ export const getBookingValidationSchema = (currency?: string) => {
         "Invalid wallet address",
         (value) => !!value && validate(value, currency?.toLowerCase())
       ),
-    whatsapp_number: yup.string().required("WhatsApp number is required"),
+    whatsapp_number: yup
+      .string()
+      .required("WhatsApp number is required")
+      .test("is-valid-whatsapp_number", "Invalid WhatsApp number", (value) => {
+        if (!value) return false; // Required validation already handled
+        const phoneUtil = PhoneNumberUtil.getInstance();
+        const parsedNumber = phoneUtil.parseAndKeepRawInput(
+          value,
+          country_code
+        );
+        return phoneUtil.isValidNumberForRegion(parsedNumber, country_code);
+      }),
     product: yup.object().required("Product is required"),
     status: yup.string().required("Status is required"),
   });

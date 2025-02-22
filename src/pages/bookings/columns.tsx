@@ -1,22 +1,24 @@
 import { TableColumnsType } from "antd";
 import { IBooking } from "../../interfaces/booking";
 import moment from "moment";
-import { Chip, Link } from "@mui/joy";
+import { Chip, Link, useColorScheme } from "@mui/joy";
 import {
   BookingStatusColor,
   BookingStatuses,
   BookingStatusType,
 } from "../../common/booking-utils";
-import AudioPlayer from "react-h5-audio-player";
+// import AudioPlayer from "react-h5-audio-player";
 import { useNavigate } from "react-router-dom";
 import { Launch } from "@mui/icons-material";
 import { IProduct } from "../../interfaces/product";
+import { AudioPlayer } from "react-audio-play";
 
 const useColumns = (
   infoUrl?: string,
   productInfo?: IProduct
 ): TableColumnsType<IBooking> => {
   const navigate = useNavigate();
+  const { mode } = useColorScheme();
 
   const columns: TableColumnsType<IBooking> = [
     {
@@ -135,7 +137,18 @@ const useColumns = (
       dataIndex: "audio",
       key: "audio",
       render(value) {
-        return <AudioPlayer src={value} />;
+        return (
+          <AudioPlayer
+            src={value}
+            backgroundColor="transparent"
+            color={
+              mode === "dark"
+                ? "var(--joy-palette-neutral-100)"
+                : "var(--joy-palette-neutral-800)"
+            }
+            style={{ boxShadow: "none" }}
+          />
+        );
       },
     },
 

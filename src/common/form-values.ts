@@ -44,6 +44,7 @@ export const BookingInitialValues: IBooking = {
   telegram_user: "",
   telegram_group: "",
   whatsapp_number: "",
+  country_code: "",
   audio: "",
   status: "pending",
   product: ProductInitialValues,

@@ -1,6 +1,4 @@
 import React, { useEffect } from "react";
-import "react-h5-audio-player/lib/styles.css";
-import "./audio_player.css";
 import { useColorScheme } from "@mui/joy/styles";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { Layout } from "./components";
@@ -29,7 +27,7 @@ const Navigation: React.FC = () => {
 
   useEffect(() => {
     if (location.pathname === "/") {
-      // setMode("dark");
+      setMode("dark");
     }
   }, [location.pathname, setMode]);
 

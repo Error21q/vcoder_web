@@ -17,6 +17,11 @@ import {
 } from "../interfaces/booking";
 import { Chip, ColorPaletteProp, Typography } from "@mui/joy";
 import moment from "moment";
+import {
+  defaultCountries,
+  FlagImage,
+  parseCountry,
+} from "react-international-phone";
 
 export type BookingStatusType =
   | "pending"
@@ -105,6 +110,11 @@ export const getBookingStatsJSON = (data: IBookingSummary) => {
 };
 
 export const getBookingInfoLeftContent = (booking: IBooking) => {
+  const countryData = defaultCountries.find(
+    (c) => parseCountry(c).iso2 === booking?.country_code
+  );
+  const countryDetails = countryData ? parseCountry(countryData) : null;
+
   const bookingInfo: IBookingInfo[] = [
     {
       title: <Typography level="title-sm">Booking ID</Typography>,
@@ -148,7 +158,15 @@ export const getBookingInfoLeftContent = (booking: IBooking) => {
     },
     {
       title: <Typography level="title-sm">WhatsApp number</Typography>,
-      value: <Typography level="body-sm">{booking.whatsapp_number}</Typography>,
+      value: (
+        <Typography level="body-sm" sx={{ display: "flex" }}>
+          <FlagImage
+            iso2={countryDetails?.iso2}
+            style={{ marginRight: "8px" }}
+          />
+          (+{countryDetails?.dialCode}) {booking.whatsapp_number}
+        </Typography>
+      ),
     },
     {
       title: <Typography level="title-sm">Telegram username</Typography>,

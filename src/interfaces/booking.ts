@@ -12,6 +12,7 @@ export interface IBooking {
   contract_address?: string | null;
   telegram_group?: string;
   whatsapp_number: string;
+  country_code?: string;
   telegram_user?: string;
   audio: string;
   refer_code?: string | null;

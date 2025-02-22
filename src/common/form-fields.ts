@@ -94,6 +94,21 @@ export const BookingInputFields: IForm[] = [
     type: "text",
     required: true,
   },
+  {
+    name: "contract_address",
+    label: "Contract address",
+    type: "text",
+  },
+  {
+    name: "domain_name",
+    label: "Website",
+    type: "text",
+  },
+  {
+    name: "cancel_reason",
+    label: "Cancel reason",
+    type: "text",
+  },
 ];
 
 export const BookingActionInputFields: IForm[] = [

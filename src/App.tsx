@@ -1,6 +1,4 @@
 import React from "react";
-import "react-h5-audio-player/lib/styles.css";
-import "./audio_player.css";
 import { CssVarsProvider, extendTheme } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
 import GlobalStyles from "@mui/joy/GlobalStyles";

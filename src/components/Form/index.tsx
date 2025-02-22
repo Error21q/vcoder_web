@@ -24,6 +24,7 @@ interface FormProps {
   onSubmit: (values: any) => void;
   onSearch?: (value: any) => void;
   onProductSelect?: (value: IProduct | undefined) => void;
+  onCountrySelect?: (country_code: string) => void;
   statuses?: any[];
   products?: IProduct[] | undefined;
   blockchain?: IBlockchain[] | undefined;
@@ -41,6 +42,7 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
     onSubmit,
     onSearch,
     onProductSelect,
+    onCountrySelect,
     statuses,
     products,
     blockchain,
@@ -173,8 +175,10 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
                       required
                       name={field.name}
                       value={values[field.name]}
+                      defaultCountry={values?.country_code}
                       selectedCountry={(country: any) => {
-                        console.log("countrycountry", country);
+                        onCountrySelect?.(country?.iso2);
+                        setFieldValue("country_code", country?.iso2);
                       }}
                       onChange={(event) => {
                         setFieldValue(field.name, event.target.value || null);

@@ -104,6 +104,7 @@ const AudioRecorder = (props: AudioRecorderProps) => {
       <Box sx={{ display: "flex", gap: 2 }}>
         <Button
           variant="soft"
+          size="sm"
           onClick={startRecording}
           disabled={status === "recording" || status === "paused"}
           startDecorator={
@@ -120,6 +121,7 @@ const AudioRecorder = (props: AudioRecorderProps) => {
         {(status === "recording" || status === "paused") && (
           <Button
             variant="soft"
+            size="sm"
             color="warning"
             onClick={handlePauseResume}
             startDecorator={
@@ -133,6 +135,7 @@ const AudioRecorder = (props: AudioRecorderProps) => {
         {(status === "recording" || status === "paused") && (
           <Button
             variant="soft"
+            size="sm"
             color="danger"
             onClick={stopRecording}
             disabled={status !== "recording" && status !== "paused"}

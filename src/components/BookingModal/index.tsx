@@ -19,10 +19,10 @@ import { useRef, useState } from "react";
 import { FormikProps } from "formik";
 import { IBooking } from "../../interfaces/booking";
 import { ErrorOutlined } from "@mui/icons-material";
-import AudioPlayer from "react-h5-audio-player";
 import AudioRecorder from "../AudioRecorder";
 import { getBookingValidationSchema } from "../../common/form-schema";
 import { IProduct } from "../../interfaces/product";
+import { AudioPlayer } from "react-audio-play";
 
 interface BookingModalProps {
   open: boolean;
@@ -38,9 +38,10 @@ const BookingModal = (props: BookingModalProps) => {
     props;
   const formikRef = useRef<FormikProps<any>>(null);
   const [audio, setAudio] = useState<File>();
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
 
   const handleSubmit = async () => {
-    if (formikRef.current) await formikRef.current.submitForm();
+    if (formikRef.current) await formikRef?.current?.submitForm();
     if (!formikRef.current?.isValid) return;
     onSubmit(formikRef.current?.values, audio as File);
   };
@@ -54,7 +55,23 @@ const BookingModal = (props: BookingModalProps) => {
           onClose();
         }}
       >
-        <ModalDialog layout="fullscreen" sx={{ m: 5, borderRadius: "lg" }}>
+        <ModalDialog
+          layout={window.innerWidth >= 768 ? "fullscreen" : "center"}
+          sx={(theme) => ({
+            m: 5,
+            borderRadius: "lg",
+            border: 0,
+            [theme.breakpoints.only("xs")]: {
+              top: "unset",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              m: 0,
+              transform: "none",
+              maxWidth: "unset",
+            },
+          })}
+        >
           <ModalClose />
           <DialogTitle>
             Book
@@ -64,14 +81,18 @@ const BookingModal = (props: BookingModalProps) => {
 
           <Divider />
 
-          <DialogContent sx={{ p: { md: 5 } }}>
+          <DialogContent sx={{ p: { md: 2 } }}>
             <Form
               formikRef={formikRef}
               initialValues={BookingInitialValues}
               validationSchema={getBookingValidationSchema(
-                selectedProduct.blockchain.currency
+                selectedProduct.blockchain.currency,
+                selectedCountry
               )}
-              inputFields={BookingInputFields.slice(2)}
+              inputFields={BookingInputFields.slice(2).slice(0, -3)}
+              onCountrySelect={(country_code: string) => {
+                setSelectedCountry(country_code);
+              }}
               onSubmit={(_) => _}
             />
 
@@ -89,7 +110,12 @@ const BookingModal = (props: BookingModalProps) => {
                 <Card>
                   <Typography level="title-lg">Recorded Voice</Typography>
                   {audio ? (
-                    <AudioPlayer src={URL.createObjectURL(audio)} />
+                    <AudioPlayer
+                      src={URL.createObjectURL(audio)}
+                      backgroundColor="transparent"
+                      color={"var(--joy-palette-neutral-100)"}
+                      style={{ boxShadow: "none" }}
+                    />
                   ) : (
                     <Typography level="body-sm">
                       No voice recorded yet.

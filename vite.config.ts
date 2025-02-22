@@ -4,7 +4,7 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 
 export default defineConfig({
   plugins: [react()],
-  base: "https://app.vcoder.io",
+  // base: "https://app.vcoder.io",
   optimizeDeps: {
     esbuildOptions: {
       define: {

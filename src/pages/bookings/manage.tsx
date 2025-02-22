@@ -28,7 +28,10 @@ export const ManageBooking = () => {
   const formikRef = useRef<FormikProps<any>>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [products, setProducts] = useState<IProduct[]>();
-  const [selectedProduct, setSelectedProduct] = useState<IProduct>();
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [selectedProduct, setSelectedProduct] = useState<IProduct | undefined>(
+    rowData?.product || undefined
+  );
 
   const onProductSearch = async (value: string) => {
     try {
@@ -40,7 +43,7 @@ export const ManageBooking = () => {
   };
 
   const handleSubmit = async () => {
-    if (formikRef.current) await formikRef.current.submitForm();
+    if (formikRef.current) await formikRef?.current?.submitForm();
     if (
       !formikRef.current?.isValid ||
       formikRef.current?.values.product?.id == 0
@@ -51,7 +54,6 @@ export const ManageBooking = () => {
     try {
       const payload: IBooking = {
         ...formikRef.current?.values,
-        // status: "pending",
         audio: import.meta.env.VITE_DEFAULT_AUDIO,
       };
       await saveBooking(payload);
@@ -90,7 +92,8 @@ export const ManageBooking = () => {
               formikRef={formikRef}
               initialValues={rowData || BookingInitialValues}
               validationSchema={getBookingValidationSchema(
-                selectedProduct?.blockchain?.currency
+                selectedProduct?.blockchain?.currency,
+                selectedCountry
               )}
               inputFields={BookingInputFields}
               statuses={BookingStatuses}
@@ -99,6 +102,9 @@ export const ManageBooking = () => {
               onSearch={onProductSearch}
               onProductSelect={(product: IProduct | undefined) => {
                 setSelectedProduct(product);
+              }}
+              onCountrySelect={(country_code: string) => {
+                setSelectedCountry(country_code);
               }}
             />
           </Box>
