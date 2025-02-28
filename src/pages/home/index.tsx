@@ -1,11 +1,4 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Grid,
-  ToggleButtonGroup,
-  Typography,
-} from "@mui/joy";
+import { Box, Button, Grid, Typography } from "@mui/joy";
 import {
   BookingModal,
   CardProduct,
@@ -16,8 +9,6 @@ import { useEffect, useState } from "react";
 import { IProduct, IProductFilter } from "../../interfaces/product";
 import { getProduct, getProducts } from "../../api/products";
 import { IPaginate, IPagination } from "../../interfaces/pagination";
-import { IBlockchain } from "../../interfaces/blockchain";
-import { getBlockchains } from "../../api/blockchains";
 import { getBooking, saveBooking } from "../../api/bookings";
 import { IBooking, IBookingStepper } from "../../interfaces/booking";
 import {
@@ -26,48 +17,38 @@ import {
   FindReplaceOutlined,
 } from "@mui/icons-material";
 import { showSnackbar } from "../../components/SnackbarUtils";
-import { ProductInitialValues } from "../../common/form-values";
+import {
+  ProductFilterInitialValues,
+  ProductInitialValues,
+} from "../../common/form-values";
 import { Empty } from "antd";
 import { getBookingStepper } from "../../common/booking-utils";
 import { uploadFile } from "../../api/storage";
+import Filters from "./filters";
 
 export const HomePage = () => {
   const [rows, setRows] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [blockchainsLoading, setBlockchainsLoading] = useState<boolean>(false);
+  const [filters, setFilters] = useState<IProductFilter>({
+    ...ProductFilterInitialValues,
+    status: "available",
+  });
   const [initialLoading, setInitialLoading] = useState<boolean>(true);
   const [showError, setShowError] = useState<boolean>(false);
-  const [toggleBtn, setToggleBtn] = useState<string | null>(null);
   const [bookingSteps, setBookingSteps] = useState<IBookingStepper[]>([]);
   const [selectedProduct, setSelectedProduct] =
     useState<IProduct>(ProductInitialValues);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [openTrackModal, setOpenTrackModal] = useState<boolean>(false);
-  const [blockchains, setBlockchains] = useState<IBlockchain[]>([]);
   const [pagination, setPagination] = useState<IPagination>();
   const [paginate, setPaginate] = useState<IPaginate>({
     page: Number(import.meta.env.VITE_PAGINATION_PAGE),
     limit: Number(import.meta.env.VITE_PAGINATION_PRODUCT_LIMIT),
   });
 
-  const fetchBlockchains = async () => {
-    setBlockchainsLoading(true);
-    try {
-      const response = await getBlockchains("", 1, 100, "");
-      setBlockchains(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-    setBlockchainsLoading(false);
-  };
-
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const filters: IProductFilter = {
-        blockchainId: Number(toggleBtn),
-        status: "available",
-      };
       const response = await getProducts(
         "",
         paginate.page,
@@ -153,11 +134,7 @@ export const HomePage = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [paginate, toggleBtn]);
-
-  useEffect(() => {
-    fetchBlockchains();
-  }, []);
+  }, [paginate, filters]);
 
   return (
     <Box p={2} bgcolor={"#010314"}>
@@ -192,38 +169,15 @@ export const HomePage = () => {
           alignItems={"center"}
           gap={2}
         >
-          <ToggleButtonGroup
-            size="sm"
-            value={toggleBtn}
-            onChange={(_, newValue) => {
-              setInitialLoading(true);
-              setToggleBtn(newValue);
-              setPaginate((prev) => ({ ...prev, page: 1 }));
+          <Filters
+            onApplyFilters={(filters: IProductFilter) => {
+              setPaginate((prevPaginate) => ({
+                ...prevPaginate,
+                page: 1,
+              }));
+              setFilters({ ...filters, status: "available" });
             }}
-            sx={{ display: "flex", overflowX: "auto" }}
-          >
-            {blockchains?.map((item: IBlockchain, index: number) => (
-              <Button
-                key={index}
-                value={item.id}
-                startDecorator={
-                  <Avatar size="sm" alt="blockchain-logo" src={item.logo}>
-                    {item.currency}
-                  </Avatar>
-                }
-              >
-                {item.name}
-              </Button>
-            ))}
-
-            {blockchainsLoading && (
-              <Loader
-                propsCircularProgress={{
-                  size: "sm",
-                }}
-              />
-            )}
-          </ToggleButtonGroup>
+          />
         </Grid>
       </Grid>
 

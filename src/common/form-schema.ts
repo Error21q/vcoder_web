@@ -17,32 +17,32 @@ export const BlockchainValidationSchema = yup.object().shape({
     .url("Blockchain URL must be a valid URL"),
 });
 
-export const CategoryValidationSchema = yup.object().shape({
+export const PlanValidationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
   description: yup.string().required("Description is required"),
-});
-
-export const ProductValidationSchema = yup.object().shape({
-  category: yup.object().required("Category is required"),
-  blockchain: yup.object().required("Blockchain is required"),
-  url: yup
-    .string()
-    .required("URL is required")
-    .url("Product URL must be a valid URL"),
-  name: yup.string().required("Name is required"),
-  status: yup.string().required("Status is required"),
   roi: yup
     .number()
     .required("ROI is required")
     .moreThan(0, "ROI must be greater than 0"),
-  commission: yup
+  referral: yup
     .number()
-    .required("Commission is required")
-    .moreThan(0, "Commission must be greater than 0"),
+    .required("Referral is required")
+    .moreThan(0, "Referral must be greater than 0"),
   level: yup
     .number()
     .required("Level is required")
     .moreThan(0, "Level must be greater than 0"),
+});
+
+export const ProductValidationSchema = yup.object().shape({
+  plan: yup.object().required("Plan is required"),
+  blockchain: yup.object().required("Blockchain is required"),
+  url: yup
+    .string()
+    .required("URL is required")
+    .url("Demo URL must be a valid URL"),
+  name: yup.string().required("Name is required"),
+  status: yup.string().required("Status is required"),
 });
 
 export const getBookingValidationSchema = (
@@ -74,6 +74,27 @@ export const getBookingValidationSchema = (
         );
         return phoneUtil.isValidNumberForRegion(parsedNumber, country_code);
       }),
+    refer_code: yup
+      .string()
+      .optional()
+      .matches(
+        /^[a-zA-Z0-9]*$/,
+        "Use only letters (A-Z, a-z) and numbers (0-9)."
+      ),
+    telegram_user: yup
+      .string()
+      .optional()
+      .matches(
+        /^[a-zA-Z0-9]*$/,
+        "Use only letters (A-Z, a-z) and numbers (0-9)."
+      ),
+    telegram_group: yup
+      .string()
+      .optional()
+      .matches(
+        /^[a-zA-Z0-9]*$/,
+        "Use only letters (A-Z, a-z) and numbers (0-9)."
+      ),
     product: yup.object().required("Product is required"),
     status: yup.string().required("Status is required"),
   });
@@ -85,7 +106,10 @@ export const getDynamicBookingActionValidationSchema = (
   return yup.object().shape({
     contract_address:
       status === "delivered"
-        ? yup.string().required("Contract address is required")
+        ? yup
+            .string()
+            .required("Contract address is required")
+            .matches(/^[a-zA-Z0-9]*$/, "Only alphanumeric characters allowed")
         : yup.string().optional(),
     domain_name:
       status === "delivered"

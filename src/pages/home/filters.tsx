@@ -19,27 +19,50 @@ import {
 } from "@mui/joy";
 import { useEffect, useState } from "react";
 import { TuneRounded } from "@mui/icons-material";
-import { ProductStatuses } from "../../common/product-utils";
 import { IBlockchain } from "../../interfaces/blockchain";
 import { getBlockchains } from "../../api/blockchains";
 import { IProductFilter, IProductFilterFields } from "../../interfaces/product";
 import { IPlan } from "../../interfaces/plan";
-import { ProductFilterInitialValues } from "../../common/form-values";
 import { getPlans } from "../../api/plan";
+import { ProductFilterInitialValues } from "../../common/form-values";
 
 interface FilterModalProps {
   onApplyFilters: (filters: IProductFilter) => void;
 }
 
-const Filters = (props: FilterModalProps) => {
-  const { onApplyFilters } = props;
+const Filters = ({ onApplyFilters }: FilterModalProps) => {
   const [open, setOpen] = useState(false);
   const [isApplied, setIsApplied] = useState(false);
-  const [plans, setPlans] = useState<IPlan[]>([]);
   const [blockchains, setBlockchains] = useState<IBlockchain[]>([]);
+  const [plans, setPlans] = useState<IPlan[]>([]);
   const [selectedFilters, setSelectedFilters] = useState<IProductFilter>(
     ProductFilterInitialValues
   );
+
+  // Fetch blockchains
+  const fetchBlockchains = async () => {
+    try {
+      const response = await getBlockchains("", 1, 100, "");
+      setBlockchains(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Fetch plans
+  const fetchPlans = async () => {
+    try {
+      const response = await getPlans("", 1, 100, "");
+      setPlans(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchBlockchains();
+    fetchPlans();
+  }, []);
 
   // Utility to get unique and sorted values
   const getUniqueSortedValues = (key: keyof IPlan) =>
@@ -49,15 +72,6 @@ const Filters = (props: FilterModalProps) => {
 
   // Configuration array to dynamically render fields
   const filterFields: IProductFilterFields[] = [
-    {
-      label: "Status",
-      key: "status",
-      options: ProductStatuses.map((item) => ({
-        value: item.value,
-        label: item.title,
-        icon: item.icon,
-      })),
-    },
     {
       label: "Blockchain",
       key: "blockchainId",
@@ -101,30 +115,6 @@ const Filters = (props: FilterModalProps) => {
     setSelectedFilters((prev) => ({ ...prev, [key]: value }));
   };
 
-  const fetchBlockchains = async () => {
-    try {
-      const response = await getBlockchains("", 1, 100, "");
-      setBlockchains(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  // Fetch plans
-  const fetchPlans = async () => {
-    try {
-      const response = await getPlans("", 1, 100, "");
-      setPlans(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchBlockchains();
-    fetchPlans();
-  }, []);
-
   // Apply filters
   const handleApply = () => {
     if (!selectedFilters) return;
@@ -144,6 +134,7 @@ const Filters = (props: FilterModalProps) => {
     <>
       <Badge badgeContent={isApplied ? "" : null} color="primary">
         <Button
+          size="lg"
           startDecorator={<TuneRounded />}
           onClick={() => setOpen(true)}
           variant={isApplied ? "solid" : "outlined"}
@@ -155,7 +146,6 @@ const Filters = (props: FilterModalProps) => {
       <Modal open={open} onClose={() => setOpen(false)}>
         <ModalDialog>
           <ModalClose />
-
           <DialogTitle>
             <Typography level="h4">Filters</Typography>
           </DialogTitle>

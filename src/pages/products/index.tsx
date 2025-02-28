@@ -20,15 +20,14 @@ import { useNavigate } from "react-router-dom";
 import { showSnackbar } from "../../components/SnackbarUtils";
 import useColumns from "./columns";
 import Filters from "./filters";
-import {
-  ProductFilterValues,
-  ProductStatusType,
-} from "../../common/product-utils";
+import { ProductFilterInitialValues } from "../../common/form-values";
 
 export const ProductsPage = () => {
   const navigate = useNavigate();
   const columns = useColumns();
-  const [filter, setFilter] = useState<IProductFilter>(ProductFilterValues);
+  const [filters, setFilters] = useState<IProductFilter>(
+    ProductFilterInitialValues
+  );
   const [search, setSearch] = useState<string>("");
   const [rows, setRows] = useState<IProduct[]>([]);
   const [row, setRow] = useState<IProduct>();
@@ -115,7 +114,7 @@ export const ProductsPage = () => {
         paginate.page,
         paginate.limit,
         sort,
-        filter
+        filters
       );
       setRows(response.data);
       setPagination(response.pagination);
@@ -165,7 +164,7 @@ export const ProductsPage = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [paginate, search, sort, filter]);
+  }, [paginate, search, sort, filters]);
 
   return (
     <Box>
@@ -177,27 +176,25 @@ export const ProductsPage = () => {
         }}
       />
 
-      <Grid container spacing={2} py={2} display={"flex"} flexWrap={"wrap"}>
-        <Grid xs={12} md={8}>
+      <Grid
+        container
+        spacing={2}
+        py={2}
+        display={"flex"}
+        flexWrap={"wrap"}
+        alignItems={"flex-end"}
+      >
+        <Grid xs={12} md={11}>
           <SearchBar
             placeholder="Search by name or url"
             value={search}
             onChange={(text: string) => setSearch(text)}
           />
         </Grid>
-        <Grid xs={12} md={4}>
+        <Grid xs={12} md={1}>
           <Filters
-            onStatusChange={(text: ProductStatusType | null) => {
-              setFilter((prevFilter) => ({
-                ...prevFilter,
-                status: text ?? undefined, // Ensuring it's of the correct type
-              }));
-            }}
-            onBlockchainChange={(blockchainId: number | null) => {
-              setFilter((prevFilter) => ({
-                ...prevFilter,
-                blockchainId: blockchainId ?? undefined, // Ensuring type matches
-              }));
+            onApplyFilters={(filters: IProductFilter) => {
+              setFilters(filters);
             }}
           />
         </Grid>

@@ -11,9 +11,9 @@ import {
 } from "@mui/joy";
 import Uploader from "../../components/Uploader";
 import { useEffect, useRef, useState } from "react";
-import { ICategory } from "../../interfaces/category";
+import { IPlan } from "../../interfaces/plan";
 import { IBlockchain } from "../../interfaces/blockchain";
-import { getCategories } from "../../api/category";
+import { getPlans } from "../../api/plan";
 import { getBlockchains } from "../../api/blockchains";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FormikProps } from "formik";
@@ -35,7 +35,7 @@ export const ManageProduct = () => {
   const navigate = useNavigate();
   const rowData: IProduct = useLocation().state;
   const formikRef = useRef<FormikProps<any>>(null);
-  const [categories, setCategories] = useState<ICategory[]>();
+  const [plans, setPlans] = useState<IPlan[]>();
   const [blockchains, setBlockchains] = useState<IBlockchain[]>();
   const [loading, setLoading] = useState<boolean>(false);
   const [fileList, setFileList] = useState<any[]>([]);
@@ -93,10 +93,10 @@ export const ManageProduct = () => {
     setLoading(false);
   };
 
-  const fetchCategories = async () => {
+  const fetchPlans = async () => {
     try {
-      const result = await getCategories("", 1, 1000);
-      setCategories(result.data);
+      const result = await getPlans("", 1, 1000);
+      setPlans(result.data);
     } catch (error) {
       console.log(error);
     }
@@ -111,7 +111,7 @@ export const ManageProduct = () => {
   };
 
   useEffect(() => {
-    fetchCategories();
+    fetchPlans();
     fetchBlockchains();
   }, []);
 
@@ -151,7 +151,7 @@ export const ManageProduct = () => {
               inputFields={ProductInputFields}
               statuses={ProductStatuses}
               blockchain={blockchains}
-              category={categories}
+              plan={plans}
               onSubmit={(_) => _}
             />
 

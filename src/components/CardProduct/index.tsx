@@ -94,7 +94,7 @@ const CardProduct = (props: CardProductProps) => {
           }
           level="title-sm"
         >
-          {product.roi}% ROI
+          {product.plan.roi}% ROI
         </Typography>
         <Divider orientation="vertical" />
         <Typography
@@ -105,7 +105,7 @@ const CardProduct = (props: CardProductProps) => {
           }
           level="title-sm"
         >
-          {product.commission}% Referral
+          {product.plan.referral}% Referral
         </Typography>
         <Divider orientation="vertical" />
         <Typography
@@ -116,7 +116,7 @@ const CardProduct = (props: CardProductProps) => {
           }
           level="title-sm"
         >
-          {product.level} Levels
+          {product.plan.level} Levels
         </Typography>
       </CardOverflow>
 

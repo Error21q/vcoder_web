@@ -4,8 +4,6 @@ import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { Layout } from "./components";
 import {
   BlockchainsPage,
-  CategoriesPage,
-  ManageCategory,
   DashboardPage,
   LoginPage,
   BookingsPage,
@@ -16,6 +14,8 @@ import {
   ViewProduct,
   ViewBooking,
   HomePage,
+  PlansPage,
+  ManagePlan,
 } from "./pages";
 import { ConfigProvider, theme } from "antd";
 import { UserRole, useUserRole } from "./common/auth-utils";
@@ -50,15 +50,15 @@ const Navigation: React.FC = () => {
           <Route path="bookings/view" element={<ViewBooking />} />
 
           {userRole === UserRole.MANAGER ? (
-            <Route path='*' element={<Navigate to='dashboard' />} />
+            <Route path="*" element={<Navigate to="dashboard" />} />
           ) : (
             <>
               <Route path="products" element={<ProductsPage />} />
               <Route path="products/manage" element={<ManageProduct />} />
               <Route path="products/view" element={<ViewProduct />} />
 
-              <Route path="categories" element={<CategoriesPage />} />
-              <Route path="categories/manage" element={<ManageCategory />} />
+              <Route path="plans" element={<PlansPage />} />
+              <Route path="plans/manage" element={<ManagePlan />} />
 
               <Route path="blockchains" element={<BlockchainsPage />} />
               <Route path="blockchains/manage" element={<ManageBlockchain />} />

@@ -49,14 +49,14 @@ export const getSidebarMenu = () => {
     },
     {
       id: 5,
-      title: "Categories",
-      route: "/admin/categories",
+      title: "Plans",
+      route: "/admin/plans",
       icon: <CategoryOutlined />,
       hide: userRole === UserRole.MANAGER,
     },
     {
       id: 6,
-      title: "BlockChains",
+      title: "Blockchains",
       route: "/admin/blockchains",
       icon: <CurrencyBitcoinOutlined />,
       hide: userRole === UserRole.MANAGER,

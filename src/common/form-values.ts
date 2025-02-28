@@ -1,7 +1,7 @@
 import { IBlockchain } from "../interfaces/blockchain";
-import { ICategory } from "../interfaces/category";
+import { IPlan } from "../interfaces/plan";
 import { IBooking, IBookingAction } from "../interfaces/booking";
-import { IProduct } from "../interfaces/product";
+import { IProduct, IProductFilter } from "../interfaces/product";
 import { IAuth } from "../interfaces/auth";
 
 export const AuthInitialValues: IAuth = {
@@ -17,10 +17,13 @@ export const BlockchainInitialValues: IBlockchain = {
   url: "",
 };
 
-export const CategoryInitialValues: ICategory = {
+export const PlanInitialValues: IPlan = {
   id: 0,
   name: "",
   description: "",
+  roi: null,
+  referral: null,
+  level: null,
 };
 
 export const ProductInitialValues: IProduct = {
@@ -29,11 +32,8 @@ export const ProductInitialValues: IProduct = {
   url: "",
   name: "",
   status: null,
-  roi: null,
-  commission: null,
-  level: null,
   blockchain: BlockchainInitialValues,
-  category: CategoryInitialValues,
+  plan: PlanInitialValues,
 };
 
 export const BookingInitialValues: IBooking = {
@@ -54,4 +54,12 @@ export const BookingActionInitialValues: IBookingAction = {
   domain_name: "",
   contract_address: "",
   cancel_reason: "",
+};
+
+export const ProductFilterInitialValues: IProductFilter = {
+  status: null,
+  blockchainId: null,
+  level: null,
+  roi: null,
+  referral: null,
 };

@@ -1,14 +1,14 @@
-import { ICategory } from "../interfaces/category";
+import { IPlan } from "../interfaces/plan";
 import Request from "./Request";
 
-export const getCategories = async (
+export const getPlans = async (
   search?: string,
   page?: number,
   limit?: number,
   sort?: string
 ) => {
   try {
-    let url: string = import.meta.env.VITE_API_CATEGORY + "?";
+    let url: string = import.meta.env.VITE_API_PLAN + "?";
     if (search) url += `search=${search}&`;
     if (page) url += `page=${page}&`;
     if (limit) url += `limit=${limit}&`;
@@ -21,10 +21,10 @@ export const getCategories = async (
   }
 };
 
-export const saveCategory = async (data: ICategory) => {
+export const savePlan = async (data: IPlan) => {
   try {
     const response = await Request.post(
-      `${import.meta.env.VITE_API_CATEGORY}`,
+      `${import.meta.env.VITE_API_PLAN}`,
       data
     );
     return response.data;
@@ -33,10 +33,10 @@ export const saveCategory = async (data: ICategory) => {
   }
 };
 
-export const removeCategory = async (id: number) => {
+export const removePlan = async (id: number) => {
   try {
     const response = await Request.delete(
-      `${import.meta.env.VITE_API_CATEGORY}/${id}`
+      `${import.meta.env.VITE_API_PLAN}/${id}`
     );
     return response.data;
   } catch (error) {

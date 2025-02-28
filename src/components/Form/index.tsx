@@ -12,7 +12,7 @@ import { Select as SelectAntD } from "antd";
 import { Formik, FormikProps } from "formik";
 import { forwardRef, Ref } from "react";
 import { IBlockchain } from "../../interfaces/blockchain";
-import { ICategory } from "../../interfaces/category";
+import { IPlan } from "../../interfaces/plan";
 import { IForm } from "../../interfaces/form";
 import { IProduct } from "../../interfaces/product";
 import PhoneInput from "../PhoneInput";
@@ -28,7 +28,7 @@ interface FormProps {
   statuses?: any[];
   products?: IProduct[] | undefined;
   blockchain?: IBlockchain[] | undefined;
-  category?: ICategory[] | undefined;
+  plan?: IPlan[] | undefined;
   formikRef?: Ref<FormikProps<any>>;
   fullWidth?: boolean;
 }
@@ -46,7 +46,7 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
     statuses,
     products,
     blockchain,
-    category,
+    plan,
     fullWidth,
   } = props;
 
@@ -56,8 +56,8 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
         return products;
       case "blockchain":
         return blockchain;
-      case "category":
-        return category;
+      case "plan":
+        return plan;
       default:
         return [];
     }

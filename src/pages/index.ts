@@ -3,9 +3,9 @@ import { LoginPage } from "./login";
 import { DashboardPage } from "./dashboard";
 import { BookingsPage } from "./bookings";
 import { ProductsPage } from "./products";
-import { CategoriesPage } from "./categories";
+import { PlansPage } from "./plans";
 import { BlockchainsPage } from "./blockchains";
-import { ManageCategory } from "./categories/manage";
+import { ManagePlan } from "./plans/manage";
 import { ManageBlockchain } from "./blockchains/manage";
 import { ManageProduct } from "./products/manage";
 import { ManageBooking } from "./bookings/manage";
@@ -18,9 +18,9 @@ export {
   DashboardPage,
   BookingsPage,
   ProductsPage,
-  CategoriesPage,
+  PlansPage,
   BlockchainsPage,
-  ManageCategory,
+  ManagePlan,
   ManageBlockchain,
   ManageProduct,
   ManageBooking,

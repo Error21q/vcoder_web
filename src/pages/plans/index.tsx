@@ -13,16 +13,16 @@ import {
   DeleteOutlined,
   EditOutlined,
 } from "@mui/icons-material";
-import { getCategories, removeCategory } from "../../api/category";
+import { getPlans, removePlan } from "../../api/plan";
 import { useNavigate } from "react-router-dom";
-import { ICategory } from "../../interfaces/category";
+import { IPlan } from "../../interfaces/plan";
 import { showSnackbar } from "../../components/SnackbarUtils";
 
-export const CategoriesPage = () => {
+export const PlansPage = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState<string>("");
-  const [rows, setRows] = useState<ICategory[]>([]);
-  const [row, setRow] = useState<ICategory>();
+  const [rows, setRows] = useState<IPlan[]>([]);
+  const [row, setRow] = useState<IPlan>();
   const [loading, setLoading] = useState<boolean>(false);
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [sort, setSort] = useState<string>(import.meta.env.VITE_DEFAULT_SORT);
@@ -43,7 +43,7 @@ export const CategoriesPage = () => {
     key: "operation",
     fixed: "right",
     width: "var(--Table-lastColumnWidth)",
-    render: (_: any, record: ICategory) => (
+    render: (_: any, record: IPlan) => (
       <Box sx={{ display: "flex", gap: 1 }}>
         <Tooltip title="Edit item" variant="outlined" color="primary" arrow>
           <IconButton
@@ -73,10 +73,10 @@ export const CategoriesPage = () => {
     ),
   };
 
-  const fetchCategories = async () => {
+  const fetchPlans = async () => {
     setLoading(true);
     try {
-      const response = await getCategories(
+      const response = await getPlans(
         search,
         paginate.page,
         paginate.limit,
@@ -93,9 +93,9 @@ export const CategoriesPage = () => {
   const onDelete = async () => {
     setLoading(true);
     try {
-      await removeCategory(row?.id || 0);
+      await removePlan(row?.id || 0);
       setRow(undefined);
-      await fetchCategories();
+      await fetchPlans();
       showSnackbar({
         message: "Data removed successfully.",
         color: "success",
@@ -111,13 +111,13 @@ export const CategoriesPage = () => {
   };
 
   useEffect(() => {
-    fetchCategories();
+    fetchPlans();
   }, [paginate, search, sort]);
 
   return (
     <Box>
       <DataTableHead
-        title="Categories"
+        title="Plans"
         btnText="Add New"
         onClick={() => {
           navigate("manage");
@@ -167,4 +167,4 @@ export const CategoriesPage = () => {
     </Box>
   );
 };
-export default CategoriesPage;
+export default PlansPage;

@@ -1,11 +1,12 @@
 import moment from "moment";
-import { IProduct, IProductFilter, IProductInfo } from "../interfaces/product";
-import { Avatar, Chip, Link, Typography } from "@mui/joy";
+import { IProduct, IProductInfo } from "../interfaces/product";
+import { Avatar, Box, Chip, Link, Typography } from "@mui/joy";
 import {
   CancelOutlined,
   CheckCircleOutlined,
   Launch,
 } from "@mui/icons-material";
+import { PlanInfo } from "../components";
 
 export type ProductStatusType = "available" | "notavailable";
 
@@ -23,11 +24,6 @@ export const ProductStatuses = [
     title: "Not available",
   },
 ];
-
-export const ProductFilterValues: IProductFilter = {
-  blockchainId: undefined,
-  status: undefined,
-};
 
 export const getProductInfoObject = (product: IProduct) => {
   const productInfo: IProductInfo[] = [
@@ -80,20 +76,13 @@ export const getProductInfoObject = (product: IProduct) => {
       ),
     },
     {
-      title: <Typography level="title-sm">Category</Typography>,
-      value: <Typography level="body-sm">{product.category.name}</Typography>,
-    },
-    {
-      title: <Typography level="title-sm">ROI</Typography>,
-      value: <Typography level="body-sm">{product.roi}</Typography>,
-    },
-    {
-      title: <Typography level="title-sm">Level</Typography>,
-      value: <Typography level="body-sm">{product.level}</Typography>,
-    },
-    {
-      title: <Typography level="title-sm">Commission</Typography>,
-      value: <Typography level="body-sm">{product.commission}</Typography>,
+      title: <Typography level="title-sm">Plan</Typography>,
+      value: (
+        <Box display={"flex"} gap={1} alignItems={"center"}>
+          <Typography level="body-sm">{product.plan.name}</Typography>
+          <PlanInfo plan={product.plan} />
+        </Box>
+      ),
     },
     {
       title: <Typography level="title-sm">Listed on</Typography>,

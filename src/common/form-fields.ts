@@ -5,9 +5,12 @@ export const AuthInputFields: IForm[] = [
   { name: "password", label: "Password", type: "password", required: true },
 ];
 
-export const CategoryInputFields: IForm[] = [
+export const PlanInputFields: IForm[] = [
   { name: "name", label: "Name", type: "text", required: true },
   { name: "description", label: "Description", type: "text", required: true },
+  { name: "roi", label: "ROI", type: "number", required: true },
+  { name: "referral", label: "Referral", type: "number", required: true },
+  { name: "level", label: "Level", type: "number", required: true },
 ];
 
 export const BlockChainInputFields: IForm[] = [
@@ -19,15 +22,12 @@ export const BlockChainInputFields: IForm[] = [
 export const ProductInputFields: IForm[] = [
   { name: "name", label: "Name", type: "text", required: true },
   { name: "url", label: "Demo URL", type: "text", required: true },
-  { name: "roi", label: "ROI", type: "number", required: true },
-  { name: "commission", label: "Commission", type: "number", required: true },
-  { name: "level", label: "Level", type: "number", required: true },
   {
     isSelect: true,
-    name: "category",
-    label: "Category",
+    name: "plan",
+    label: "Plan",
     type: "text",
-    placeholder: "Select category",
+    placeholder: "Select plan",
     required: true,
   },
   {

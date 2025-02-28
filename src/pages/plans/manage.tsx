@@ -8,20 +8,20 @@ import {
   Typography,
 } from "@mui/joy";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ICategory } from "../../interfaces/category";
+import { IPlan } from "../../interfaces/plan";
 import { FormikProps } from "formik";
-import { CategoryInitialValues } from "../../common/form-values";
-import { CategoryValidationSchema } from "../../common/form-schema";
-import { saveCategory } from "../../api/category";
+import { PlanInitialValues } from "../../common/form-values";
+import { PlanValidationSchema } from "../../common/form-schema";
+import { savePlan } from "../../api/plan";
 import { showSnackbar } from "../../components/SnackbarUtils";
 import { CheckOutlined } from "@mui/icons-material";
 import { Form } from "../../components";
-import { CategoryInputFields } from "../../common/form-fields";
+import { PlanInputFields } from "../../common/form-fields";
 import { useRef, useState } from "react";
 
-export const ManageCategory = () => {
+export const ManagePlan = () => {
   const navigate = useNavigate();
-  const rowData: ICategory = useLocation().state;
+  const rowData: IPlan = useLocation().state;
   const formikRef = useRef<FormikProps<any>>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -31,8 +31,8 @@ export const ManageCategory = () => {
     setLoading(true);
 
     try {
-      const payload: ICategory = formikRef.current?.values;
-      await saveCategory(payload);
+      const payload: IPlan = formikRef.current?.values;
+      await savePlan(payload);
       showSnackbar({
         message: "Data saved successfully.",
         color: "success",
@@ -50,15 +50,15 @@ export const ManageCategory = () => {
   return (
     <Box>
       <Typography level="h2" mb={5}>
-        Manage Category
+        Manage Plan
       </Typography>
 
       <Card>
         <CardOverflow variant="soft" sx={{ py: 2 }}>
           <Typography level="title-md">
             {rowData?.id
-              ? "Update an existing category"
-              : "Create a new category"}
+              ? "Update an existing plan"
+              : "Create a new plan"}
           </Typography>
         </CardOverflow>
 
@@ -66,9 +66,9 @@ export const ManageCategory = () => {
           <Box gap={3} flexDirection="column" display="flex">
             <Form
               formikRef={formikRef}
-              initialValues={rowData || CategoryInitialValues}
-              validationSchema={CategoryValidationSchema}
-              inputFields={CategoryInputFields}
+              initialValues={rowData || PlanInitialValues}
+              validationSchema={PlanValidationSchema}
+              inputFields={PlanInputFields}
               onSubmit={(_) => _}
             />
           </Box>
@@ -102,4 +102,4 @@ export const ManageCategory = () => {
   );
 };
 
-export default ManageCategory;
+export default ManagePlan;

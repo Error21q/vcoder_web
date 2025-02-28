@@ -60,10 +60,10 @@ const useColumns = (infoUrl?: string): TableColumnsType<IBooking> => {
       },
     },
     {
-      title: "Category",
+      title: "Plan",
       width: 200,
-      dataIndex: "category",
-      key: "category",
+      dataIndex: "plan",
+      key: "plan",
       render(value) {
         return value?.name;
       },

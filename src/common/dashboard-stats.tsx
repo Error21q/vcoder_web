@@ -30,9 +30,9 @@ export const DashboardStats: IDashboardStats[] = [
   },
   {
     id: 3,
-    title: "Add new category",
-    description: "click to add a new category",
-    route: "/admin/categories/manage",
+    title: "Add new plan",
+    description: "click to add a new plan",
+    route: "/admin/plans/manage",
     icon: <CategoryOutlined />,
   },
   {

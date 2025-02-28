@@ -19,6 +19,7 @@ import TrackingModal from "./TrackingModal";
 import AlertDialogModal from "./AlertDialogModal";
 import ProductInfo from "./ProductInfo";
 import BookingInfo from "./BookingInfo";
+import PlanInfo from "./PlanInfo";
 import { SnackbarProvider } from "./SnackbarProvider";
 import { SnackbarUtilsConfigurator } from "./SnackbarUtils";
 
@@ -44,6 +45,7 @@ export {
   AlertDialogModal,
   ProductInfo,
   BookingInfo,
+  PlanInfo,
   SnackbarProvider,
   SnackbarUtilsConfigurator,
 };

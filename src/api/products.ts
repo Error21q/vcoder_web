@@ -8,14 +8,14 @@ export const getProducts = async (
   sort?: string,
   filters?: IProductFilter
 ) => {
-  try {
+  try {    
     let url: string = import.meta.env.VITE_API_PRODUCT + "?";
-    if (search) url += `search=${search}&`;
+    if (search) url += `search=${encodeURIComponent(search)}&`;
     if (page) url += `page=${page}&`;
     if (limit) url += `limit=${limit}&`;
-    if (sort) url += `sort=${sort}&`;
-    if (filters?.blockchainId) url += `blockchainId=${filters.blockchainId}&`;
-    if (filters?.status) url += `status=${filters.status}&`;
+    if (sort) url += `sort=${encodeURIComponent(sort)}&`;
+
+    if (filters) url += `filters=${encodeURIComponent(JSON.stringify(filters))}&`;
 
     const response = await Request.get(url);
     return response.data;
