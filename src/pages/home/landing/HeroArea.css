@@ -1,0 +1,98 @@
+.safe-secure-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(90deg, #FF5A5F, #FF3136);
+    width: 606.46px;
+    height: 186px;
+    padding: 30px 40px;
+    border-radius: 40px;
+    color: #fff;
+    font-size: 35.592px;
+    font-weight: bold;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    gap: 15px;
+    cursor: pointer;
+    position: relative;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Mobile View Styles */
+@media (max-width: 768px) {
+    .safe-secure-card {
+        width: 90%;
+        height: 140px;
+        padding: 20px 30px;
+        font-size: 25px;
+        border-radius: 20px;
+    }
+
+    .safe-secure-card .play-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .safe-secure-card .play-btn i {
+        transform: scale(0.8);
+    }
+}
+
+/* Smaller Mobile View Styles */
+@media (max-width: 480px) {
+    .safe-secure-card {
+        width: 80%;
+        height: 120px;
+        padding: 15px 20px;
+        font-size: 20px;
+        border-radius: 15px;
+    }
+
+    .safe-secure-card .play-btn svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .safe-secure-card .play-btn i {
+        transform: scale(0.7);
+    }
+}
+
+.btn3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: bold;
+}
+
+.arrow-icon svg {
+    transition: transform 0.3s ease-in-out;
+}
+
+.btn3:hover .arrow-icon svg {
+    transform: translateX(5px);
+}
+.book-btn {
+    border: medium none;
+    border-radius: 30px;
+    color: var(--tg-black);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    font-size: 14px;
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.42px;
+    line-height: 1;
+    margin-bottom: 0;
+    padding: 18px 45px;
+    text-align: center;
+    text-transform: none;
+    touch-action: manipulation;
+    transition: all 0.3s ease 0s;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+.book-btn .arrow-icon {
+    position: relative;
+    top: -1px; /* Adjust this value to move it up */
+}

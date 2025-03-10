@@ -1,0 +1,25 @@
+/*  Mobile View: Play Button First */
+@media (max-width: 768px) {
+    .cta-responsive {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .mobile-play-btn {
+        order: -1;
+        margin-bottom: 20px;
+    }
+
+    .desktop-play-btn {
+        display: none !important;
+    }
+}
+
+/*  Desktop View: Keep Original Order */
+@media (min-width: 769px) {
+    .mobile-play-btn {
+        display: none !important;
+    }
+}

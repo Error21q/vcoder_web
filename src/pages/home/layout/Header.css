@@ -1,0 +1,42 @@
+.header-action-container {
+    flex-grow: 1; /* Allows fluid spacing */
+    display: flex;
+    justify-content: flex-end; /* Pushes BOOK NOW button towards the right */
+    align-items: center;
+    padding-right: 30px; /* Adds spacing from the right edge */
+}
+
+.header-action {
+    position: relative; /* Removed absolute positioning to allow fluid spacing */
+    display: flex;
+    align-items: center;
+}
+
+.btn2 {
+    padding: 10px 20px;
+    background-color: #ff5a5f;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    display: inline-block;
+    text-align: center;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    .menu-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header-action-container {
+        padding-right: 20px; /* Adjust spacing for mobile */
+    }
+
+    .btn2 {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+}

@@ -1,0 +1,15 @@
+.btn3 {
+    padding: 12px 25px;
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.btn3 .arrow-icon {
+    margin-left: 8px;
+}

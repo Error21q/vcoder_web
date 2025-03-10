@@ -1,0 +1,11 @@
+.footer-wrapper{
+  font-family: "Outfit", sans-serif !important;
+}
+
+@media (max-width: 768px) { /* Apply changes only for mobile screens */
+    .footer-wrapper .widget-contact {
+      text-align: center; /* Center-align text */
+      margin-top: 20px; /* Add spacing for better separation */
+    }
+  }
+  
