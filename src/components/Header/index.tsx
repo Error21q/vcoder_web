@@ -51,7 +51,7 @@ const Header = () => {
       </Box>
 
       <Box>
-        <img src="/logo.svg" alt="logo" loading="lazy" width={100} />
+        <img src="/assets/img/main/logo.svg" alt="logo" loading="lazy" width={100} />
       </Box>
 
       <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>

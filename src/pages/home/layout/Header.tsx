@@ -17,7 +17,7 @@ const Header = () => {
                   >
                     <Link to="/">
                       <img
-                        src="/logo.svg"
+                        src="/assets/img/main/logo.svg"
                         alt="Logo"
                         style={{
                           width: "100%",

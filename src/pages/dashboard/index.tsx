@@ -90,8 +90,8 @@ export const DashboardPage = () => {
           }}
         >
           <img
-            src="/header_bg.png"
-            srcSet="/header_bg.png"
+            src="/assets/img/main/header_bg.png"
+            srcSet="/assets/img/main/header_bg.png"
             loading="lazy"
             alt="background-image"
           />

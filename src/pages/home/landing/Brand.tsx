@@ -6,7 +6,7 @@ const brand_data = [
   "/assets/img/update/client/binance.png",
   "/assets/img/update/client/tron.png",
   "/assets/img/update/client/coinbase.png",
-  "/assets/img/update/client/salona.png",
+  "/assets/img/update/client/solana.png",
   "/assets/img/update/client/trust.png",
   "/assets/img/update/client/polygon.png",
 ];

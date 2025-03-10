@@ -15,7 +15,7 @@ const Footer = () => {
                 >
                   <Link to="/">
                     <img
-                      src="/logo.svg"
+                      src="/assets/img/main/logo.svg"
                       alt="Vcoder"
                       style={{
                         height: "40px", // Increased height for better visibility

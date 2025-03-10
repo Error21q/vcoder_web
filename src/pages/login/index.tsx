@@ -86,7 +86,7 @@ export const LoginPage = () => {
     >
       <Grid md={4} xs={12}>
         <Stack mb={2} justifyContent={"center"} alignItems={"center"}>
-          <img src="/logo.svg" alt="logo" loading="lazy" width={200} />
+          <img src="/assets/img/main/logo.svg" alt="logo" loading="lazy" width={200} />
         </Stack>
 
         <Card size="lg" sx={{ boxShadow: "lg" }}>
