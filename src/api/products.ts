@@ -6,16 +6,19 @@ export const getProducts = async (
   page?: number,
   limit?: number,
   sort?: string,
-  filters?: IProductFilter
+  filters?: IProductFilter,
+  shuffle?: boolean
 ) => {
-  try {    
+  try {
     let url: string = import.meta.env.VITE_API_PRODUCT + "?";
     if (search) url += `search=${encodeURIComponent(search)}&`;
     if (page) url += `page=${page}&`;
     if (limit) url += `limit=${limit}&`;
     if (sort) url += `sort=${encodeURIComponent(sort)}&`;
+    if (shuffle) url += `shuffle=${shuffle}&`;
 
-    if (filters) url += `filters=${encodeURIComponent(JSON.stringify(filters))}&`;
+    if (filters)
+      url += `filters=${encodeURIComponent(JSON.stringify(filters))}&`;
 
     const response = await Request.get(url);
     return response.data;

@@ -53,8 +53,9 @@ export const Contracts = () => {
         "",
         paginate.page,
         paginate.limit,
-        "created_at,DESC",
-        filters
+        "",
+        filters,
+        true
       );
 
       if (paginate.page === 1) {
