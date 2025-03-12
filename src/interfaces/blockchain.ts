@@ -2,8 +2,9 @@ export interface IBlockchain {
   id: number;
   name: string;
   logo: string;
-  url: string;
   currency: string;
+  scan_url: string;
+  rpc_url: string;
   created_at?: string;
   updated_at?: string;
 }

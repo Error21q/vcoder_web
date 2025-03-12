@@ -35,8 +35,14 @@ export const Columns: TableColumnsType<IBlockchain> = [
   {
     title: "Scan URL",
     width: 200,
-    dataIndex: "url",
-    key: "url",
+    dataIndex: "scan_url",
+    key: "scan_url",
+  },
+  {
+    title: "RPC URL",
+    width: 200,
+    dataIndex: "rpc_url",
+    key: "rpc_url",
   },
   {
     title: "Created At",

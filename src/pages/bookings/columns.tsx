@@ -7,8 +7,7 @@ import {
   BookingStatuses,
   BookingStatusType,
 } from "../../common/booking-utils";
-// import AudioPlayer from "react-h5-audio-player";
-import { useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { Launch } from "@mui/icons-material";
 import { IProduct } from "../../interfaces/product";
 import { AudioPlayer } from "react-audio-play";
@@ -17,7 +16,6 @@ const useColumns = (
   infoUrl?: string,
   productInfo?: IProduct
 ): TableColumnsType<IBooking> => {
-  const navigate = useNavigate();
   const { mode } = useColorScheme();
 
   const columns: TableColumnsType<IBooking> = [
@@ -40,9 +38,10 @@ const useColumns = (
         return (
           <Link
             level="body-sm"
-            onClick={() => {
-              navigate(infoUrl ? infoUrl : "view", { state: record });
-            }}
+            component={RouterLink}
+            to={infoUrl ? infoUrl+record.booking_id : "view/" + record.booking_id}
+            underline="none"
+            state={record}
           >
             {value}
           </Link>
@@ -75,15 +74,15 @@ const useColumns = (
       key: "contract_address",
       render(value, record) {
         const url: string =
-          record?.product?.blockchain?.url ||
-          productInfo?.blockchain?.url ||
+          record?.product?.blockchain?.scan_url ||
+          productInfo?.blockchain?.scan_url ||
           "";
         return (
           <Link
             href={url + value}
             slotProps={{ root: { target: "_blank" } }}
             level="body-sm"
-            variant="plain"
+            underline="none"
             startDecorator={value && <Launch />}
           >
             {value}
@@ -102,7 +101,7 @@ const useColumns = (
             href={value}
             slotProps={{ root: { target: "_blank" } }}
             level="body-sm"
-            variant="plain"
+            underline="none"
             startDecorator={value && <Launch />}
           >
             {value}

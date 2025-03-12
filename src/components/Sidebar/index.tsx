@@ -7,8 +7,9 @@ import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
 import { closeSidebar } from "../../common/sidebar-utils";
 import { styles } from "./style";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 import { ISidebarMenu } from "../../common/sidebar-menu";
+import { Link } from "@mui/joy";
 
 interface SidebarProps {
   sidebarMenu: ISidebarMenu[];
@@ -16,7 +17,6 @@ interface SidebarProps {
 
 const Sidebar = (props: SidebarProps) => {
   const { sidebarMenu } = props;
-  const navigate = useNavigate();
   const location = useLocation();
 
   return (
@@ -30,26 +30,27 @@ const Sidebar = (props: SidebarProps) => {
       <Box sx={{}}>
         <List sx={styles.list}>
           {sidebarMenu.map((item) => (
-            <ListItem
+            <Link
+              component={RouterLink}
+              to={item.route}
               key={item.id}
-              sx={{ display: item.hide ? "none" : "block" }}
+              underline="none"
             >
-              <ListItemButton
-                sx={{ py: 1 }}
-                selected={location.pathname === item.route}
-                onClick={() => {
-                  closeSidebar();
-                  item.newTab
-                    ? window.open(item.route, "_blank")
-                    : navigate(item.route);
-                }}
+              <ListItem
+                key={item.id}
+                sx={{ width: "100%", display: item.hide ? "none" : "block" }}
               >
-                {item.icon}
-                <ListItemContent>
-                  <Typography level="title-md">{item.title}</Typography>
-                </ListItemContent>
-              </ListItemButton>
-            </ListItem>
+                <ListItemButton
+                  sx={{ py: 1 }}
+                  selected={location.pathname === item.route}
+                >
+                  {item.icon}
+                  <ListItemContent>
+                    <Typography level="title-md">{item.title}</Typography>
+                  </ListItemContent>
+                </ListItemButton>
+              </ListItem>
+            </Link>
           ))}
         </List>
       </Box>

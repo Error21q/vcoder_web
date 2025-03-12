@@ -11,10 +11,14 @@ export const AuthValidationSchema = yup.object().shape({
 export const BlockchainValidationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
   currency: yup.string().required("Currency is required"),
-  url: yup
+  scan_url: yup
     .string()
-    .required("URL is required")
-    .url("Blockchain URL must be a valid URL"),
+    .required("Scan URL is required")
+    .url("Scan URL must be a valid URL"),
+  rpc_url: yup
+    .string()
+    .required("RPC URL is required")
+    .url("RPC URL must be a valid URL"),
 });
 
 export const PlanValidationSchema = yup.object().shape({

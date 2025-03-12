@@ -80,7 +80,7 @@ export const BlockchainsPage = () => {
         search,
         paginate.page,
         paginate.limit,
-        sort,
+        sort
       );
       setRows(response.data);
       setPagination(response.pagination);
@@ -119,7 +119,7 @@ export const BlockchainsPage = () => {
       <DataTableHead
         title="Blockchains"
         btnText="Add New"
-        onClick={() => {
+        onClick={async () => {
           navigate("manage");
         }}
       />
@@ -149,7 +149,7 @@ export const BlockchainsPage = () => {
           setSort(
             sorter.order == undefined
               ? import.meta.env.VITE_DEFAULT_SORT
-              : sorter.columnKey + "," + sorter.order,
+              : sorter.columnKey + "," + sorter.order
           );
         }}
       />

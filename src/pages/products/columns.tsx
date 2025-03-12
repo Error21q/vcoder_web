@@ -2,30 +2,29 @@ import { Image, TableColumnsType } from "antd";
 import { Avatar, Chip, Link } from "@mui/joy";
 import moment from "moment";
 import { Launch } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { IBooking } from "../../interfaces/booking";
 import { ProductStatuses } from "../../common/product-utils";
 
 const useColumns = (infoUrl?: string): TableColumnsType<IBooking> => {
-  const navigate = useNavigate();
-
   const columns: TableColumnsType<IBooking> = [
     {
       title: "Name",
       width: 200,
-      dataIndex: "name",
+      dataIndex: ["id", "name"],
       key: "name",
       sorter: true,
       fixed: "left",
-      render(value, record: IBooking) {
+      render(_, record: any) {
         return (
           <Link
             level="body-sm"
-            onClick={() => {
-              navigate(infoUrl ? infoUrl : "view", { state: record });
-            }}
+            component={RouterLink}
+            to={infoUrl ? infoUrl : "view/" + record["id"]}
+            underline="none"
+            state={record}
           >
-            {value}
+            {record["name"] as string}
           </Link>
         );
       },
@@ -53,6 +52,7 @@ const useColumns = (infoUrl?: string): TableColumnsType<IBooking> => {
             slotProps={{ root: { target: "_blank" } }}
             startDecorator={<Launch />}
             level="body-sm"
+            underline="none"
           >
             {value}
           </Link>

@@ -27,7 +27,7 @@ export const getProducts = async (
   }
 };
 
-export const getProduct = async (id: number) => {
+export const getProduct = async (id: number | string) => {
   try {
     const response = await Request.get(
       `${import.meta.env.VITE_API_PRODUCT}/${id}`

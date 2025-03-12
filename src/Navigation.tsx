@@ -47,7 +47,7 @@ const Navigation: React.FC = () => {
 
           <Route path="bookings" element={<BookingsPage />} />
           <Route path="bookings/manage" element={<ManageBooking />} />
-          <Route path="bookings/view" element={<ViewBooking />} />
+          <Route path="bookings/view/:bookingId" element={<ViewBooking />} />
 
           {userRole === UserRole.MANAGER ? (
             <Route path="*" element={<Navigate to="dashboard" />} />
@@ -55,7 +55,7 @@ const Navigation: React.FC = () => {
             <>
               <Route path="products" element={<ProductsPage />} />
               <Route path="products/manage" element={<ManageProduct />} />
-              <Route path="products/view" element={<ViewProduct />} />
+              <Route path="products/view/:productId" element={<ViewProduct />} />
 
               <Route path="plans" element={<PlansPage />} />
               <Route path="plans/manage" element={<ManagePlan />} />

@@ -14,7 +14,8 @@ export const BlockchainInitialValues: IBlockchain = {
   name: "",
   currency: "",
   logo: "",
-  url: "",
+  scan_url: "",
+  rpc_url: "",
 };
 
 export const PlanInitialValues: IPlan = {

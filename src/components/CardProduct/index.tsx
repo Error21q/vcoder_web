@@ -14,6 +14,8 @@ import {
   Launch,
   Percent,
 } from "@mui/icons-material";
+import { Link as RouterLink } from "react-router-dom";
+import { Link } from "@mui/joy";
 
 interface CardProductProps {
   product: IProduct;
@@ -130,16 +132,16 @@ const CardProduct = (props: CardProductProps) => {
             Book Now
           </Button>
 
-          <Button
-            variant="soft"
-            color="primary"
-            startDecorator={<Launch />}
-            onClick={() => {
-              window.open(product.url, "_blank");
-            }}
+          <Link
+            component={RouterLink}
+            to={product.url}
+            target="_blank"
+            underline="none"
           >
-            View Demo
-          </Button>
+            <Button variant="soft" color="primary" startDecorator={<Launch />}>
+              View Demo
+            </Button>
+          </Link>
         </CardActions>
       </CardOverflow>
     </Card>

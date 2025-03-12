@@ -1,42 +1,79 @@
 import { Box, Typography } from "@mui/joy";
-import { useLocation } from "react-router-dom";
-import { IProductInfo } from "../../interfaces/product";
-import { DataTable, BookingInfo, ProductInfo } from "../../components";
+import { useLocation, useParams } from "react-router-dom";
+import { DataTable, BookingInfo, ProductInfo, Loader } from "../../components";
 import useColumns from "./columns";
 import { getProductInfoObject } from "../../common/product-utils";
-import { IBooking, IBookingInfo } from "../../interfaces/booking";
-import { useEffect, useState } from "react";
+import { IBooking } from "../../interfaces/booking";
+import { useEffect, useMemo, useState } from "react";
 import { getProduct } from "../../api/products";
 import {
   getBookingInfoLeftContent,
   getBookingInfoRightContent,
 } from "../../common/booking-utils";
+import { getBooking } from "../../api/bookings";
 
 export const ViewBooking = () => {
-  const booking: IBooking = useLocation().state;
-  const columns = useColumns("", booking.product);
-  const productInfoObject: IProductInfo[] = getProductInfoObject(
-    booking.product
+  const { bookingId } = useParams();
+  const location = useLocation();
+  const [booking, setBooking] = useState<IBooking | null>(
+    location.state || null
   );
-  const bookingInfoLeftContent: IBookingInfo[] =
-    getBookingInfoLeftContent(booking);
-  const bookingInfoRightContent: IBookingInfo[] =
-    getBookingInfoRightContent(booking);
   const [loading, setLoading] = useState<boolean>(false);
   const [pastBookings, setPastBookings] = useState<IBooking[]>([]);
+
+  // Derived values using useMemo (only recomputed if `booking` changes)
+  const columns = useMemo(
+    () => (booking ? useColumns("", booking.product) : []),
+    [booking]
+  );
+  const productInfoObject = useMemo(
+    () => (booking ? getProductInfoObject(booking.product) : []),
+    [booking]
+  );
+  const bookingInfoLeftContent = useMemo(
+    () => (booking ? getBookingInfoLeftContent(booking) : []),
+    [booking]
+  );
+  const bookingInfoRightContent = useMemo(
+    () => (booking ? getBookingInfoRightContent(booking) : []),
+    [booking]
+  );
+
+  const fetchBooking = async () => {
+    if (!bookingId) return;
+    try {
+      const response = await getBooking(bookingId);
+      setBooking(response.data);
+    } catch (error) {
+      console.error("Error fetching booking:", error);
+    }
+  };
 
   const fetchPastBookings = async () => {
     setLoading(true);
     try {
-      const response = await getProduct(booking.product.id);
+      const response = await getProduct(booking?.product.id || 0);
       setPastBookings(response.data.bookings || []);
     } catch (error) {}
     setLoading(false);
   };
 
   useEffect(() => {
+    if (!booking) fetchBooking();
     fetchPastBookings();
-  }, []);
+  }, [booking, bookingId]);
+
+  if (loading) {
+    return (
+      <Loader
+        propsBox={{
+          display: "flex",
+          justifyContent: "center",
+          p: 5,
+        }}
+      />
+    );
+  }
 
   return (
     <Box>
@@ -53,10 +90,12 @@ export const ViewBooking = () => {
         Product Information
       </Typography>
 
-      <ProductInfo
-        product={booking.product}
-        productInfoObject={productInfoObject}
-      />
+      {booking && (
+        <ProductInfo
+          product={booking.product}
+          productInfoObject={productInfoObject}
+        />
+      )}
 
       <Typography level="h2" py={3}>
         Previous Bookings

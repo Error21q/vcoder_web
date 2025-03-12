@@ -16,7 +16,8 @@ export const PlanInputFields: IForm[] = [
 export const BlockChainInputFields: IForm[] = [
   { name: "name", label: "Name", type: "text", required: true },
   { name: "currency", label: "Currency", type: "text", required: true },
-  { name: "url", label: "URL", type: "text", required: true },
+  { name: "scan_url", label: "Scan URL", type: "text", required: true },
+  { name: "rpc_url", label: "RPC URL", type: "text", required: true },
 ];
 
 export const ProductInputFields: IForm[] = [

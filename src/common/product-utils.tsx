@@ -35,6 +35,7 @@ export const getProductInfoObject = (product: IProduct) => {
           slotProps={{ root: { target: "_blank" } }}
           startDecorator={<Launch />}
           level="body-sm"
+          underline="none"
         >
           {product.url}
         </Link>
