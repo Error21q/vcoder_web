@@ -28,13 +28,20 @@ export interface IBooking {
 }
 
 export interface IBookingSummary {
-  today_bookings: number;
-  pending_bookings: number;
-  approved_bookings: number;
-  cancelled_bookings: number;
-  delivered_bookings: number;
+  today_pending: number;
+  today_approved: number;
+  today_cancelled: number;
   today_delivered: number;
+
+  monthly_pending: number;
+  monthly_approved: number;
+  monthly_cancelled: number;
   monthly_delivered: number;
+
+  total_pending: number;
+  total_approved: number;
+  total_cancelled: number;
+  total_delivered: number;
 }
 
 export interface IBookingStats {

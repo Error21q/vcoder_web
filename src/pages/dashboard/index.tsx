@@ -1,72 +1,24 @@
-import {
-  Avatar,
-  Box,
-  Card,
-  CardContent,
-  CardCover,
-  Chip,
-  Divider,
-  Grid,
-  List,
-  ListDivider,
-  ListItem,
-  Typography,
-} from "@mui/joy";
-import { CardClickable, CardSummary, Loader } from "../../components";
+import { Box, Card, CardContent, CardCover, Grid, Typography } from "@mui/joy";
+import { CardClickable, CardSummary } from "../../components";
 import { DashboardStats } from "../../common/dashboard-stats";
 import { useEffect, useState } from "react";
-import { getBookings, summaryBookings } from "../../api/bookings";
-import { getProducts } from "../../api/products";
-import { IBooking, IBookingStats } from "../../interfaces/booking";
-import { IProduct } from "../../interfaces/product";
-import { Inventory2Outlined, ShoppingCartOutlined } from "@mui/icons-material";
-import moment from "moment";
-import {
-  getBookingStatsJSON,
-  BookingStatusColor,
-  BookingStatusType,
-} from "../../common/booking-utils";
+import { summaryBookings } from "../../api/bookings";
+import { IBookingSummary } from "../../interfaces/booking";
 import { UserRole, useUserRole } from "../../common/auth-utils";
+import { BookingSummaryInitialValues } from "../../common/form-values";
 
 export const DashboardPage = () => {
   const userRole = useUserRole();
   const [loading, setLoading] = useState<boolean>(false);
-  const [bookings, setBookings] = useState<IBooking[]>([]);
-  const [products, setProducts] = useState<IProduct[]>([]);
-  const [bookingSummary, setBookingSummary] = useState<IBookingStats[]>([]);
-  const search = "",
-    page = 1,
-    limit = 6,
-    sort = "updated_at,DESC";
-
-  const fetchBookings = async () => {
-    setLoading(true);
-    try {
-      const response = await getBookings(search, page, limit, sort);
-      setBookings(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-    setLoading(false);
-  };
-
-  const fetchProducts = async () => {
-    setLoading(true);
-    try {
-      const response = await getProducts(search, page, limit, sort);
-      setProducts(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-    setLoading(false);
-  };
+  const [bookingSummary, setBookingSummary] = useState<IBookingSummary>(
+    BookingSummaryInitialValues
+  );
 
   const fetchSummary = async () => {
     setLoading(true);
     try {
       const response = await summaryBookings();
-      const smm: IBookingStats[] = getBookingStatsJSON(response.data);
-      setBookingSummary(smm);
+      setBookingSummary(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -74,8 +26,6 @@ export const DashboardPage = () => {
   };
 
   useEffect(() => {
-    fetchBookings();
-    fetchProducts();
     fetchSummary();
   }, []);
 
@@ -85,7 +35,7 @@ export const DashboardPage = () => {
         <CardCover
           sx={{
             background: "#0B0D0E",
-            bbookingRadius: 0,
+            borderRadius: 0,
             margin: "-50px",
           }}
         >
@@ -104,8 +54,6 @@ export const DashboardPage = () => {
         </CardContent>
       </Card>
 
-      <CardSummary data={bookingSummary} />
-
       <Grid container spacing={2} py={2}>
         {userRole === UserRole.ADMIN &&
           DashboardStats.map((card) => (
@@ -116,109 +64,34 @@ export const DashboardPage = () => {
       </Grid>
 
       <Grid container spacing={2}>
-        <Grid xs={12} sm={6} md={6}>
-          <Card>
-            <Typography level="h4" mb={1}>
-              Latest Bookings
-            </Typography>
-
-            <Divider />
-
-            <CardContent>
-              <List>
-                {bookings.map((item: IBooking, index: number) => (
-                  <Box key={index.toString()}>
-                    <ListItem
-                      sx={{ display: "flex", justifyContent: "space-between" }}
-                    >
-                      <Box display={"flex"} alignItems={"center"}>
-                        <Avatar>
-                          <ShoppingCartOutlined />
-                        </Avatar>
-
-                        <Typography level="body-sm" mx={1}>
-                          {moment(item.updated_at).format(
-                            import.meta.env.VITE_TIME_STAMP
-                          )}
-                        </Typography>
-                      </Box>
-
-                      <Typography level="body-sm">
-                        {item.wallet_address}
-                      </Typography>
-
-                      <Chip
-                        color={
-                          BookingStatusColor[item.status as BookingStatusType]
-                        }
-                        size="sm"
-                        variant="soft"
-                        sx={{ textTransform: "uppercase" }}
-                      >
-                        {item.status}
-                      </Chip>
-                    </ListItem>
-
-                    {index !== bookings.length - 1 && (
-                      <ListDivider inset="gutter" />
-                    )}
-                  </Box>
-                ))}
-              </List>
-            </CardContent>
-            {loading && <Loader />}
-          </Card>
+        <Grid xs={12} sm={12} md={12}>
+          <CardSummary
+            title="Today's Bookings"
+            data={bookingSummary}
+            separator={"today_"}
+            titlePrefix={"Today's"}
+            loading={loading}
+          />
         </Grid>
+
         <Grid xs={12} sm={6} md={6}>
-          <Card>
-            <Typography level="h4" mb={1}>
-              Latest Products
-            </Typography>
+          <CardSummary
+            title="Monthly Bookings"
+            data={bookingSummary}
+            separator={"monthly_"}
+            titlePrefix={"Monthly"}
+            loading={loading}
+          />
+        </Grid>
 
-            <Divider />
-
-            <CardContent>
-              <List>
-                {products.map((item: IProduct, index: number) => (
-                  <Box key={index.toString()}>
-                    <ListItem
-                      sx={{ display: "flex", justifyContent: "space-between" }}
-                    >
-                      <Box display={"flex"} alignItems={"center"}>
-                        <Avatar>
-                          <Inventory2Outlined />
-                        </Avatar>
-
-                        <Typography level="body-sm" mx={1}>
-                          {moment(item.updated_at).format(
-                            import.meta.env.VITE_TIME_STAMP
-                          )}
-                        </Typography>
-                      </Box>
-
-                      <Typography level="body-sm">{item.name}</Typography>
-
-                      <Chip
-                        color={
-                          item.status == "available" ? "success" : "danger"
-                        }
-                        size="sm"
-                        variant="soft"
-                        sx={{ textTransform: "uppercase" }}
-                      >
-                        {item.status}
-                      </Chip>
-                    </ListItem>
-
-                    {index !== bookings.length - 1 && (
-                      <ListDivider inset="gutter" />
-                    )}
-                  </Box>
-                ))}
-              </List>
-            </CardContent>
-            {loading && <Loader />}
-          </Card>
+        <Grid xs={12} sm={6} md={6}>
+          <CardSummary
+            title="Total Bookings"
+            data={bookingSummary}
+            separator={"total_"}
+            titlePrefix={"Total"}
+            loading={loading}
+          />
         </Grid>
       </Grid>
     </Box>

@@ -8,13 +8,7 @@ import {
   Close,
   Tag,
 } from "@mui/icons-material";
-import {
-  IBooking,
-  IBookingInfo,
-  IBookingStats,
-  IBookingStepper,
-  IBookingSummary,
-} from "../interfaces/booking";
+import { IBooking, IBookingInfo, IBookingStepper } from "../interfaces/booking";
 import { Chip, ColorPaletteProp, Typography } from "@mui/joy";
 import moment from "moment";
 import {
@@ -86,28 +80,6 @@ export const BookingAlertMeta: BookingAlertMetaInfo[] = [
     description: "Are you sure, you want to deliver this booking?",
   },
 ];
-
-export const getBookingStatsJSON = (data: IBookingSummary) => {
-  const BookingStats: IBookingStats[] = [
-    {
-      avatar: data?.today_bookings,
-      title: "Today's Bookings",
-    },
-    {
-      avatar: data?.today_delivered,
-      title: "Today's Delivered",
-    },
-    {
-      avatar: data?.pending_bookings,
-      title: "Pending Bookings",
-    },
-    {
-      avatar: data?.monthly_delivered,
-      title: "Monthly Delivered",
-    },
-  ];
-  return BookingStats;
-};
 
 export const getBookingInfoLeftContent = (booking: IBooking) => {
   const countryData = defaultCountries.find(

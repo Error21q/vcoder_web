@@ -1,40 +1,79 @@
-import Avatar from "@mui/joy/Avatar";
-import List from "@mui/joy/List";
-import ListItem from "@mui/joy/ListItem";
-import ListItemDecorator from "@mui/joy/ListItemDecorator";
-import { Card, Grid, Typography } from "@mui/joy";
-import { IBookingStats } from "../../interfaces/booking";
+import { Box, Card, Divider, Grid, Skeleton, Typography } from "@mui/joy";
+import { IBookingSummary } from "../../interfaces/booking";
+import { Statistic } from "antd";
+import {
+  BookingStatusColor,
+  BookingStatuses,
+  BookingStatusType,
+} from "../../common/booking-utils";
 
 interface CardSummaryProps {
-  data: IBookingStats[];
+  data: IBookingSummary;
+  separator: string;
+  title: string;
+  titlePrefix: string;
+  loading?: boolean;
 }
 
 const CardSummary = (props: CardSummaryProps) => {
-  const { data } = props;
+  const { data, separator, title, titlePrefix, loading } = props;
   return (
-    <List
-      orientation="horizontal"
-      variant="outlined"
-      component={Card}
-      sx={{
-        "--ListItemDecorator-size": "50px",
-        "--ListItem-paddingY": "1rem",
-        borderRadius: "sm",
-      }}
-    >
-      <Grid container minWidth={"100%"}>
-        {data?.map((item: IBookingStats, index) => (
-          <Grid key={index} xs={12} md={12 / data?.length}>
-            <ListItem sx={{ justifyContent: { md: "center" } }}>
-              <ListItemDecorator>
-                <Avatar size="lg">{item.avatar}</Avatar>
-              </ListItemDecorator>
-              <Typography level="title-lg">{item.title}</Typography>
-            </ListItem>
-          </Grid>
-        ))}
+    <Card>
+      <Typography level="h4" mb={1}>
+        {title}
+      </Typography>
+      <Divider />
+      <Grid container textAlign={"center"} spacing={loading ? 1 : 0}>
+        {Object.keys(data)
+          .filter((key) => key.startsWith(separator))
+          .map((key, index) => {
+            const status = key
+              .replace(separator, "")
+              .replace(/_/g, " ")
+              .replace(/\b\w/g, (char) => char.toUpperCase());
+            const formattedTitle = titlePrefix + " " + status;
+
+            return (
+              <Grid xs={6} sm={6} md={3} key={index}>
+                <Skeleton variant="text" level="h1" loading={loading}>
+                  <Statistic
+                    title={
+                      <Typography level="title-sm">{formattedTitle}</Typography>
+                    }
+                    formatter={() => (
+                      <Box
+                        display={"flex"}
+                        justifyContent={"center"}
+                        alignItems={"center"}
+                        gap={1}
+                      >
+                        <Typography
+                          level="title-sm"
+                          color={
+                            BookingStatusColor[
+                              status.toLowerCase() as BookingStatusType
+                            ]
+                          }
+                        >
+                          {
+                            BookingStatuses.find(
+                              (i) => i.value == status.toLowerCase()
+                            )?.icon
+                          }
+                        </Typography>
+                        <Typography level="h4">
+                          {data[key as keyof IBookingSummary]}
+                        </Typography>
+                      </Box>
+                    )}
+                    loading={loading}
+                  />
+                </Skeleton>
+              </Grid>
+            );
+          })}
       </Grid>
-    </List>
+    </Card>
   );
 };
 

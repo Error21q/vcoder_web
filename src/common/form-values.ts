@@ -1,6 +1,10 @@
 import { IBlockchain } from "../interfaces/blockchain";
 import { IPlan } from "../interfaces/plan";
-import { IBooking, IBookingAction } from "../interfaces/booking";
+import {
+  IBooking,
+  IBookingAction,
+  IBookingSummary,
+} from "../interfaces/booking";
 import { IProduct, IProductFilter } from "../interfaces/product";
 import { IAuth } from "../interfaces/auth";
 
@@ -55,6 +59,21 @@ export const BookingActionInitialValues: IBookingAction = {
   domain_name: "",
   contract_address: "",
   cancel_reason: "",
+};
+
+export const BookingSummaryInitialValues: IBookingSummary = {
+  today_pending: 0,
+  today_approved: 0,
+  today_cancelled: 0,
+  today_delivered: 0,
+  monthly_pending: 0,
+  monthly_approved: 0,
+  monthly_cancelled: 0,
+  monthly_delivered: 0,
+  total_pending: 0,
+  total_approved: 0,
+  total_cancelled: 0,
+  total_delivered: 0,
 };
 
 export const ProductFilterInitialValues: IProductFilter = {
