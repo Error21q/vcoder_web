@@ -26,7 +26,7 @@ const CardProduct = (props: CardProductProps) => {
   const { product, onBook } = props;
 
   return (
-    <Card sx={{ "&:hover": { boxShadow: "lg" } }}>
+    <Card sx={{ "&:hover": { borderColor: "ButtonFace" } }}>
       <CardOverflow>
         <AspectRatio sx={{ minWidth: 200 }}>
           <Image
@@ -54,21 +54,26 @@ const CardProduct = (props: CardProductProps) => {
       <CardContent>
         <Typography
           level="title-lg"
+          flexWrap={"wrap"}
           sx={{ py: 1, fontWeight: "xl" }}
           endDecorator={
             <Chip
-              size="md"
               startDecorator={
-                <Avatar
-                  size="md"
-                  alt="Blockchain-logo"
-                  src={product.blockchain?.logo}
-                />
+                <Avatar alt="Blockchain-logo" src={product.blockchain?.logo} />
               }
             >
               {product.blockchain?.name}
             </Chip>
           }
+          slotProps={{
+            endDecorator: {
+              sx: {
+                display: "flex",
+                flex: 1,
+                justifyContent: "flex-end",
+              },
+            },
+          }}
         >
           {product.name}
         </Typography>
@@ -124,13 +129,15 @@ const CardProduct = (props: CardProductProps) => {
 
       <CardOverflow sx={{ p: 0 }}>
         <CardActions buttonFlex="1" sx={{ px: 1, py: 1 }}>
-          <Button
-            onClick={() => {
-              onBook?.();
-            }}
-          >
-            Book Now
-          </Button>
+          {onBook && (
+            <Button
+              onClick={() => {
+                onBook?.();
+              }}
+            >
+              Book Now
+            </Button>
+          )}
 
           <Link
             component={RouterLink}

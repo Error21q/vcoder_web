@@ -1,15 +1,16 @@
 import {
+  Autocomplete,
   Box,
+  CircularProgress,
   FormControl,
   FormHelperText,
   FormLabel,
   Grid,
   Input,
   Option,
-  Select as SelectJoyUI,
+  Select,
 } from "@mui/joy";
-import { Select as SelectAntD } from "antd";
-import { Formik, FormikProps } from "formik";
+import { FastField, Formik, FormikProps } from "formik";
 import { forwardRef, Ref } from "react";
 import { IBlockchain } from "../../interfaces/blockchain";
 import { IPlan } from "../../interfaces/plan";
@@ -31,6 +32,7 @@ interface FormProps {
   plan?: IPlan[] | undefined;
   formikRef?: Ref<FormikProps<any>>;
   fullWidth?: boolean;
+  productLoading?: boolean;
 }
 
 const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
@@ -48,6 +50,7 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
     blockchain,
     plan,
     fullWidth,
+    productLoading,
   } = props;
 
   const getOptions = (fieldName: string) => {
@@ -58,6 +61,8 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
         return blockchain;
       case "plan":
         return plan;
+      case "status":
+        return statuses;
       default:
         return [];
     }
@@ -83,23 +88,32 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
           <Grid container spacing={3}>
             {inputFields.map((field: IForm) => (
               <Grid key={field.name} xs={12} sm={12} md={fullWidth ? 12 : 6}>
-                <FormControl
-                  required={field.required}
-                  error={Boolean(touched[field.name] && errors[field.name])}
-                >
-                  <FormLabel>{field.label}</FormLabel>
-                  {field.isSelect ? (
-                    field.name === "product" ? (
-                      <SelectAntD
-                        showSearch
-                        value={values[field.name]?.name}
+                {field.isSelect ? (
+                  field.name === "product" ? (
+                    <FormControl
+                      error={Boolean(touched[field.name] && errors[field.name])}
+                    >
+                      <FormLabel>{field.label}</FormLabel>
+                      <Autocomplete
                         placeholder={field.placeholder}
-                        defaultActiveFirstOption={false}
-                        suffixIcon={null}
-                        filterOption={false}
-                        onSearch={onSearch}
-                        notFoundContent={null}
-                        size="large"
+                        name={field.name}
+                        slotProps={{
+                          input: {
+                            autoComplete: "new-password",
+                          },
+                        }}
+                        type="search"
+                        freeSolo
+                        disableClearable
+                        options={
+                          products?.map((item: IProduct) => ({
+                            value: item.id,
+                            label: item.name,
+                            title: item.name,
+                          })) || []
+                        }
+                        loading={productLoading}
+                        onInputChange={(_, value) => onSearch?.(value)}
                         onChange={(_, newValue: any) => {
                           const selectedItem = products?.find(
                             (item: any) => item.id === newValue?.value
@@ -107,14 +121,33 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
                           onProductSelect?.(selectedItem);
                           setFieldValue(field.name, selectedItem || null);
                         }}
-                        options={products?.map((item: IProduct) => ({
-                          value: item.id,
-                          label: item.name,
-                          title: item.name,
-                        }))}
+                        color={
+                          touched[field.name] && errors[field.name]
+                            ? "danger"
+                            : "neutral"
+                        }
+                        error={Boolean(
+                          !values[field.name] &&
+                            touched[field.name] &&
+                            errors[field.name]
+                        )}
+                        endDecorator={
+                          productLoading ? (
+                            <CircularProgress
+                              size="sm"
+                              sx={{ bgcolor: "background.surface" }}
+                            />
+                          ) : null
+                        }
+                        sx={{ boxShadow: "none" }}
                       />
-                    ) : field.name === "status" ? (
-                      <SelectJoyUI
+                    </FormControl>
+                  ) : (
+                    <FormControl
+                      error={Boolean(touched[field.name] && errors[field.name])}
+                    >
+                      <FormLabel>{field.label}</FormLabel>
+                      <Select
                         color={
                           touched[field.name] && errors[field.name]
                             ? "danger"
@@ -123,55 +156,61 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
                         placeholder={field.placeholder}
                         variant="outlined"
                         name={field.name}
-                        value={values[field.name]}
-                        defaultValue={values[field.name]}
-                        onChange={(_, newValue) => {
-                          const selectedItem = statuses?.find(
-                            (item: any) => item.value === newValue
-                          );
-                          setFieldValue(
-                            field.name,
-                            selectedItem?.value || null
-                          );
-                        }}
-                      >
-                        {statuses?.map((item: any) => (
-                          <Option label={item.title} value={item.value}>
-                            {item.title}
-                          </Option>
-                        ))}
-                      </SelectJoyUI>
-                    ) : (
-                      <SelectJoyUI
-                        color={
-                          touched[field.name] && errors[field.name]
-                            ? "danger"
-                            : "neutral"
+                        value={
+                          field.name === "status"
+                            ? values[field.name]
+                            : values[field.name]?.id
                         }
-                        placeholder={field.placeholder}
-                        variant="outlined"
-                        name={field.name}
-                        value={values[field.name]?.id}
+                        defaultValue={
+                          field.name === "status"
+                            ? values[field.name]
+                            : values[field.name]?.id
+                        }
                         onChange={(_, newValue) => {
                           const selectedItem = getOptions(field.name)?.find(
-                            (item: any) => item.id === newValue
+                            (item: any) =>
+                              field.name === "status"
+                                ? item.value === newValue
+                                : item.id === newValue
                           );
-                          setFieldValue(field.name, selectedItem || null);
+
+                          setFieldValue(
+                            field.name,
+                            field.name === "status"
+                              ? selectedItem?.value
+                              : selectedItem || null
+                          );
                         }}
+                        sx={{ boxShadow: "none" }}
                       >
-                        {getOptions(field.name)?.map((item: any) => (
-                          <Option
-                            key={item.id}
-                            label={item.name}
-                            value={item.id}
-                          >
-                            {item.name}
-                          </Option>
-                        ))}
-                      </SelectJoyUI>
-                    )
-                  ) : field.name === "whatsapp_number" ? (
-                    <PhoneInput
+                        {getOptions(field.name)?.map(
+                          (item: any, index: number) => (
+                            <Option
+                              key={index.toString()}
+                              label={
+                                field.name === "status" ? item.title : item.name
+                              }
+                              value={
+                                field.name === "status" ? item.value : item.id
+                              }
+                            >
+                              {field.name === "status" ? item.title : item.name}
+                            </Option>
+                          )
+                        )}
+                      </Select>
+                      <FormHelperText>
+                        {touched[field.name] && errors[field.name]
+                          ? errors[field.name]
+                          : ("" as any)}
+                      </FormHelperText>
+                    </FormControl>
+                  )
+                ) : field.name === "whatsapp_number" ? (
+                  <>
+                    <FormLabel>{field.label}</FormLabel>
+                    <FastField
+                      component={PhoneInput}
                       required
                       name={field.name}
                       value={values[field.name]}
@@ -180,7 +219,7 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
                         onCountrySelect?.(country?.iso2);
                         setFieldValue("country_code", country?.iso2);
                       }}
-                      onChange={(event) => {
+                      onChange={(event: any) => {
                         setFieldValue(field.name, event.target.value || null);
                       }}
                       onBlur={handleBlur}
@@ -192,7 +231,22 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
                       )}
                       sx={{ boxShadow: "none", width: "100%" }}
                     />
-                  ) : (
+
+                    <FormHelperText
+                      sx={{
+                        color: "var(--joy-palette-danger-500)",
+                      }}
+                    >
+                      {touched[field.name] && errors[field.name]
+                        ? errors[field.name]
+                        : ("" as any)}
+                    </FormHelperText>
+                  </>
+                ) : (
+                  <FormControl
+                    error={Boolean(touched[field.name] && errors[field.name])}
+                  >
+                    <FormLabel>{field.label}</FormLabel>
                     <Input
                       type={field.type}
                       name={field.name}
@@ -202,13 +256,13 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
                       onBlur={handleBlur}
                       sx={{ boxShadow: "none" }}
                     />
-                  )}
-                  <FormHelperText>
-                    {touched[field.name] && errors[field.name]
-                      ? errors[field.name]
-                      : ("" as any)}
-                  </FormHelperText>
-                </FormControl>
+                    <FormHelperText>
+                      {touched[field.name] && errors[field.name]
+                        ? errors[field.name]
+                        : ("" as any)}
+                    </FormHelperText>
+                  </FormControl>
+                )}
               </Grid>
             ))}
           </Grid>

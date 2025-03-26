@@ -10,7 +10,7 @@ const useColumns = (infoUrl?: string): TableColumnsType<IBooking> => {
   const columns: TableColumnsType<IBooking> = [
     {
       title: "Name",
-      width: 200,
+      width: 150,
       dataIndex: ["id", "name"],
       key: "name",
       sorter: true,
@@ -31,7 +31,7 @@ const useColumns = (infoUrl?: string): TableColumnsType<IBooking> => {
     },
     {
       title: "Image",
-      width: 200,
+      width: 100,
       dataIndex: "image",
       key: "image",
       render(value) {
@@ -42,7 +42,7 @@ const useColumns = (infoUrl?: string): TableColumnsType<IBooking> => {
     },
     {
       title: "Demo URL",
-      width: 200,
+      width: 100,
       dataIndex: "url",
       key: "url",
       render(value) {
@@ -61,7 +61,7 @@ const useColumns = (infoUrl?: string): TableColumnsType<IBooking> => {
     },
     {
       title: "Plan",
-      width: 200,
+      width: 150,
       dataIndex: "plan",
       key: "plan",
       render(value) {
@@ -70,7 +70,7 @@ const useColumns = (infoUrl?: string): TableColumnsType<IBooking> => {
     },
     {
       title: "Blockchain",
-      width: 200,
+      width: 150,
       dataIndex: "blockchain",
       key: "blockchain",
       render(value) {
@@ -90,7 +90,7 @@ const useColumns = (infoUrl?: string): TableColumnsType<IBooking> => {
     },
     {
       title: "Status",
-      width: 200,
+      width: 150,
       dataIndex: "status",
       key: "status",
       render(value) {
@@ -109,7 +109,7 @@ const useColumns = (infoUrl?: string): TableColumnsType<IBooking> => {
     },
     {
       title: "Delivered?",
-      width: 200,
+      width: 50,
       dataIndex: "booking.status",
       key: "booking.status",
       render(_, record: any) {

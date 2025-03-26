@@ -23,7 +23,7 @@ const CardSummary = (props: CardSummaryProps) => {
         {title}
       </Typography>
       <Divider />
-      <Grid container textAlign={"center"} spacing={loading ? 1 : 0}>
+      <Grid container textAlign={"center"} spacing={loading ? 1 : 1}>
         {Object.keys(data)
           .filter((key) => key.startsWith(separator))
           .map((key, index) => {
@@ -34,7 +34,7 @@ const CardSummary = (props: CardSummaryProps) => {
             const formattedTitle = titlePrefix + " " + status;
 
             return (
-              <Grid xs={6} sm={6} md={3} key={index}>
+              <Grid xs={6} sm={6} md={2.4} key={index}>
                 <Skeleton variant="text" level="h1" loading={loading}>
                   <Statistic
                     title={

@@ -5,13 +5,13 @@ import moment from "moment";
 export const Columns: TableColumnsType<IBlockchain> = [
   {
     title: "Name",
-    width: 200,
+    width: 100,
     dataIndex: "name",
     key: "name",
   },
   {
     title: "Logo",
-    width: 200,
+    width: 100,
     dataIndex: "logo",
     key: "logo",
     render(value) {
@@ -28,19 +28,25 @@ export const Columns: TableColumnsType<IBlockchain> = [
   },
   {
     title: "Currency",
-    width: 200,
+    width: 100,
     dataIndex: "currency",
     key: "currency",
   },
   {
+    title: "Chain ID",
+    width: 100,
+    dataIndex: "chain_id",
+    key: "chain_id",
+  },
+  {
     title: "Scan URL",
-    width: 200,
+    width: 250,
     dataIndex: "scan_url",
     key: "scan_url",
   },
   {
     title: "RPC URL",
-    width: 200,
+    width: 250,
     dataIndex: "rpc_url",
     key: "rpc_url",
   },

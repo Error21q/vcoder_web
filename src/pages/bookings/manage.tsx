@@ -20,7 +20,7 @@ import { saveBooking } from "../../api/bookings";
 import { IProduct } from "../../interfaces/product";
 import { getProducts } from "../../api/products";
 import { BookingStatuses } from "../../common/booking-utils";
-import { getBookingValidationSchema } from "../../common/form-schema";
+import { BookingValidationSchema } from "../../common/form-schema";
 
 export const ManageBooking = () => {
   const navigate = useNavigate();
@@ -28,18 +28,17 @@ export const ManageBooking = () => {
   const formikRef = useRef<FormikProps<any>>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [products, setProducts] = useState<IProduct[]>();
-  const [selectedCountry, setSelectedCountry] = useState<string>("");
-  const [selectedProduct, setSelectedProduct] = useState<IProduct | undefined>(
-    rowData?.product || undefined
-  );
+  const [productLoading, setProductLoading] = useState<boolean>(false);
 
   const onProductSearch = async (value: string) => {
+    setProductLoading(true);
     try {
       const response = await getProducts(value, 1, 100);
       setProducts(response.data);
     } catch (error) {
       console.log(error);
     }
+    setProductLoading(false);
   };
 
   const handleSubmit = async () => {
@@ -91,21 +90,13 @@ export const ManageBooking = () => {
             <Form
               formikRef={formikRef}
               initialValues={rowData || BookingInitialValues}
-              validationSchema={getBookingValidationSchema(
-                selectedProduct?.blockchain?.currency,
-                selectedCountry
-              )}
+              validationSchema={BookingValidationSchema}
               inputFields={BookingInputFields}
               statuses={BookingStatuses}
               products={products}
               onSubmit={(_) => _}
               onSearch={onProductSearch}
-              onProductSelect={(product: IProduct | undefined) => {
-                setSelectedProduct(product);
-              }}
-              onCountrySelect={(country_code: string) => {
-                setSelectedCountry(country_code);
-              }}
+              productLoading={productLoading}
             />
           </Box>
         </CardContent>

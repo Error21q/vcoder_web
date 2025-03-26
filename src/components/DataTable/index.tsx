@@ -24,13 +24,15 @@ const useStyle = createStyles(({ css, token }) => {
 interface DataTableProps<RecordType>
   extends Omit<TableProps<RecordType>, "paginate"> {
   paginate?: IPagination;
+  hideIndexColumn?: boolean;
 }
 
 const DataTable = <RecordType extends object>(
   props: DataTableProps<RecordType>
 ) => {
   const { styles } = useStyle();
-  const { columns, dataSource, paginate, ...restProps } = props;
+  const { columns, dataSource, paginate, hideIndexColumn, ...restProps } =
+    props;
 
   const indexColumn: any = {
     title: "#",
@@ -51,7 +53,7 @@ const DataTable = <RecordType extends object>(
     <Table
       bordered
       className={styles.customTable}
-      columns={[indexColumn, ...(columns as any)]}
+      columns={hideIndexColumn ? columns : [indexColumn, ...(columns as any)]}
       dataSource={dataSource}
       pagination={false}
       scroll={{ x: "max-content" }}

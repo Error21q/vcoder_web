@@ -20,9 +20,9 @@ import { FormikProps } from "formik";
 import { IBooking } from "../../interfaces/booking";
 import { ErrorOutlined } from "@mui/icons-material";
 import AudioRecorder from "../AudioRecorder";
-import { getBookingValidationSchema } from "../../common/form-schema";
 import { IProduct } from "../../interfaces/product";
 import { AudioPlayer } from "react-audio-play";
+import { BookingValidationSchema } from "../../common/form-schema";
 
 interface BookingModalProps {
   open: boolean;
@@ -38,7 +38,6 @@ const BookingModal = (props: BookingModalProps) => {
     props;
   const formikRef = useRef<FormikProps<any>>(null);
   const [audio, setAudio] = useState<File>();
-  const [selectedCountry, setSelectedCountry] = useState<string>("");
 
   const handleSubmit = async () => {
     if (formikRef.current) await formikRef?.current?.submitForm();
@@ -85,14 +84,8 @@ const BookingModal = (props: BookingModalProps) => {
             <Form
               formikRef={formikRef}
               initialValues={BookingInitialValues}
-              validationSchema={getBookingValidationSchema(
-                selectedProduct.blockchain.currency,
-                selectedCountry
-              )}
+              validationSchema={BookingValidationSchema}
               inputFields={BookingInputFields.slice(2).slice(0, -3)}
-              onCountrySelect={(country_code: string) => {
-                setSelectedCountry(country_code);
-              }}
               onSubmit={(_) => _}
             />
 

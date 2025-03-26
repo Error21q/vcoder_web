@@ -1,24 +1,24 @@
 import {
-  FormControl,
-  FormLabel,
-  Select,
-  Option,
-  ListItemDecorator,
   Avatar,
   Modal,
   ModalDialog,
   ModalClose,
   Button,
   Typography,
-  Grid,
   Badge,
   DialogTitle,
   Divider,
   DialogContent,
   DialogActions,
+  Tabs,
+  TabList,
+  tabClasses,
+  Tab,
+  TabPanel,
+  Chip,
 } from "@mui/joy";
 import { useEffect, useState } from "react";
-import { TuneRounded } from "@mui/icons-material";
+import { Check, Clear, TuneRounded } from "@mui/icons-material";
 import { ProductStatuses } from "../../common/product-utils";
 import { IBlockchain } from "../../interfaces/blockchain";
 import { getBlockchains } from "../../api/blockchains";
@@ -34,6 +34,7 @@ interface FilterModalProps {
 const Filters = (props: FilterModalProps) => {
   const { onApplyFilters } = props;
   const [open, setOpen] = useState(false);
+  const [selectedTab, setSelectedTab] = useState<number>(0);
   const [isApplied, setIsApplied] = useState(false);
   const [plans, setPlans] = useState<IPlan[]>([]);
   const [blockchains, setBlockchains] = useState<IBlockchain[]>([]);
@@ -70,26 +71,32 @@ const Filters = (props: FilterModalProps) => {
     {
       label: "Level",
       key: "level",
-      options: getUniqueSortedValues("level").map((value) => ({
-        value,
-        label: `Level ${value}`,
-      })),
+      options: getUniqueSortedValues("level")
+        .filter((value) => Number(value) > 0)
+        .map((value) => ({
+          value,
+          label: `Level ${value}`,
+        })),
     },
     {
       label: "ROI",
       key: "roi",
-      options: getUniqueSortedValues("roi").map((value) => ({
-        value,
-        label: `${value}%`,
-      })),
+      options: getUniqueSortedValues("roi")
+        .filter((value) => Number(value) > 0)
+        .map((value) => ({
+          value,
+          label: `${value}%`,
+        })),
     },
     {
       label: "Referral",
       key: "referral",
-      options: getUniqueSortedValues("referral").map((value) => ({
-        value,
-        label: `${value}%`,
-      })),
+      options: getUniqueSortedValues("referral")
+        .filter((value) => Number(value) > 0)
+        .map((value) => ({
+          value,
+          label: `${value}%`,
+        })),
     },
   ] as const;
 
@@ -161,48 +168,75 @@ const Filters = (props: FilterModalProps) => {
           </DialogTitle>
           <Divider />
 
-          <DialogContent sx={{ p: { md: 2 } }}>
-            <Grid sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              {filterFields.map(({ label, key, options }) => (
-                <Grid key={key} xs={12}>
-                  <FormControl>
-                    <FormLabel>{label}</FormLabel>
-                    <Select
-                      size="sm"
-                      placeholder={`Filter by ${label}`}
-                      value={selectedFilters?.[key]}
-                      onChange={(_, value) => handleFilterChange(key, value)}
-                      sx={{ boxShadow: "none" }}
+          <DialogContent sx={{ maxWidth: 500, maxHeight: 500 }}>
+            <Tabs
+              value={selectedTab}
+              onChange={(_, newValue) => setSelectedTab(Number(newValue))}
+              orientation="vertical"
+              sx={{ bgcolor: "transparent" }}
+            >
+              <TabList
+                disableUnderline
+                sx={{
+                  p: 0.5,
+                  gap: 0.5,
+                  borderRadius: "lg",
+                  bgcolor: "background.level2",
+                  [`& .${tabClasses.root}[aria-selected="true"]`]: {
+                    boxShadow: "sm",
+                    bgcolor: "background.surface",
+                  },
+                }}
+              >
+                {filterFields.map(({ label }, index) => (
+                  <Tab key={index} disableIndicator>
+                    <Typography level="title-md">{label}</Typography>
+                  </Tab>
+                ))}
+              </TabList>
+
+              {filterFields.map(({ key, options }, index) => (
+                <TabPanel key={key} value={index} sx={{ p: 1 }}>
+                  {options.map((option) => (
+                    <Chip
+                      size="lg"
+                      key={option.value}
+                      variant={
+                        selectedFilters[key] === option.value
+                          ? "solid"
+                          : "outlined"
+                      }
+                      color={
+                        selectedFilters[key] === option.value
+                          ? "primary"
+                          : "neutral"
+                      }
+                      onClick={() => handleFilterChange(key, option.value)}
+                      sx={{ m: 0.5 }}
+                      startDecorator={
+                        option.logo && <Avatar size="sm" src={option.logo} />
+                      }
+                      endDecorator={
+                        selectedFilters[key] === option.value && <Check />
+                      }
                     >
-                      {options.map((option) => (
-                        <Option key={option.value} value={option.value}>
-                          {option.icon && option.icon}
-                          {option.logo && (
-                            <ListItemDecorator>
-                              <Avatar
-                                size="sm"
-                                src={option.logo}
-                                sx={{ mx: 1 }}
-                              />
-                            </ListItemDecorator>
-                          )}
-                          {option.label}
-                        </Option>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
+                      {option.label}
+                    </Chip>
+                  ))}
+                </TabPanel>
               ))}
-            </Grid>
+            </Tabs>
           </DialogContent>
-
           <Divider />
-
           <DialogActions
             orientation="horizontal"
             sx={{ justifyContent: "space-between" }}
           >
-            <Button onClick={handleClear} variant="outlined">
+            <Button
+              onClick={handleClear}
+              variant="plain"
+              startDecorator={<Clear />}
+            >
               Clear Filters
             </Button>
 

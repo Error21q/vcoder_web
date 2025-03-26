@@ -1,7 +1,5 @@
 import * as yup from "yup";
 import { BookingStatusType } from "./booking-utils";
-import { validate } from "multicoin-address-validator";
-import { PhoneNumberUtil } from "google-libphonenumber";
 
 export const AuthValidationSchema = yup.object().shape({
   username: yup.string().required("Username is required"),
@@ -11,6 +9,7 @@ export const AuthValidationSchema = yup.object().shape({
 export const BlockchainValidationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
   currency: yup.string().required("Currency is required"),
+  chain_id: yup.number().required("Chain ID is required"),
   scan_url: yup
     .string()
     .required("Scan URL is required")
@@ -49,60 +48,37 @@ export const ProductValidationSchema = yup.object().shape({
   status: yup.string().required("Status is required"),
 });
 
-export const getBookingValidationSchema = (
-  currency?: string,
-  country_code?: string
-) => {
-  return yup.object().shape({
-    email_address: yup
-      .string()
-      .required("Email address is required")
-      .email("Invalid email address"),
-    wallet_address: yup
-      .string()
-      .required("Wallet address is required")
-      .test(
-        "is-valid-wallet-address",
-        "Invalid wallet address",
-        (value) => !!value && validate(value, currency?.toLowerCase())
-      ),
-    whatsapp_number: yup
-      .string()
-      .required("WhatsApp number is required")
-      .test("is-valid-whatsapp_number", "Invalid WhatsApp number", (value) => {
-        if (!value) return false; // Required validation already handled
-        const phoneUtil = PhoneNumberUtil.getInstance();
-        const parsedNumber = phoneUtil.parseAndKeepRawInput(
-          value,
-          country_code
-        );
-        return phoneUtil.isValidNumberForRegion(parsedNumber, country_code);
-      }),
-    refer_code: yup
-      .string()
-      .optional()
-      .matches(
-        /^[a-zA-Z0-9]*$/,
-        "Use only letters (A-Z, a-z) and numbers (0-9)."
-      ),
-    telegram_user: yup
-      .string()
-      .optional()
-      .matches(
-        /^[a-zA-Z0-9]*$/,
-        "Use only letters (A-Z, a-z) and numbers (0-9)."
-      ),
-    telegram_group: yup
-      .string()
-      .optional()
-      .matches(
-        /^[a-zA-Z0-9]*$/,
-        "Use only letters (A-Z, a-z) and numbers (0-9)."
-      ),
-    product: yup.object().required("Product is required"),
-    status: yup.string().required("Status is required"),
-  });
-};
+export const BookingValidationSchema = yup.object().shape({
+  email_address: yup
+    .string()
+    .required("Email address is required")
+    .email("Invalid email address"),
+  wallet_address: yup.string().required("Wallet address is required"),
+  whatsapp_number: yup.string().required("WhatsApp number is required"),
+  refer_code: yup
+    .string()
+    .optional()
+    .matches(
+      /^[a-zA-Z0-9]*$/,
+      "Use only letters (A-Z, a-z) and numbers (0-9)."
+    ),
+  telegram_user: yup
+    .string()
+    .optional()
+    .matches(
+      /^[a-zA-Z0-9]*$/,
+      "Use only letters (A-Z, a-z) and numbers (0-9)."
+    ),
+  telegram_group: yup
+    .string()
+    .optional()
+    .matches(
+      /^[a-zA-Z0-9]*$/,
+      "Use only letters (A-Z, a-z) and numbers (0-9)."
+    ),
+  product: yup.object().required("Product is required"),
+  status: yup.string().required("Status is required"),
+});
 
 export const getDynamicBookingActionValidationSchema = (
   status: BookingStatusType

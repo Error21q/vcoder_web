@@ -7,14 +7,14 @@ import {
 } from "react-international-phone";
 import "react-international-phone/style.css";
 import { Input, Select, Option, Stack, Divider } from "@mui/joy";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
 interface PhoneInputProps extends Omit<React.ComponentProps<typeof Input>, ""> {
   defaultCountry?: CountryIso2;
   selectedCountry: (country: any) => void;
 }
 
-const PhoneInput = (props: PhoneInputProps) => {
+const PhoneInput = React.memo((props: PhoneInputProps) => {
   const { defaultCountry, selectedCountry, ...inputProps } = props;
   const { inputRef, country, setCountry } = usePhoneInput({
     defaultCountry: defaultCountry || import.meta.env.VITE_DEFAULT_COUNTRY_CODE,
@@ -22,7 +22,9 @@ const PhoneInput = (props: PhoneInputProps) => {
   });
 
   useEffect(() => {
-    selectedCountry(country);
+    if (country) {
+      selectedCountry(country);
+    }
   }, []);
 
   return (
@@ -88,6 +90,6 @@ const PhoneInput = (props: PhoneInputProps) => {
       />
     </Stack>
   );
-};
+});
 
 export default PhoneInput;

@@ -16,6 +16,7 @@ import {
   HomePage,
   PlansPage,
   ManagePlan,
+  TrackingPage,
 } from "./pages";
 import { ConfigProvider, theme } from "antd";
 import { UserRole, useUserRole } from "./common/auth-utils";
@@ -34,6 +35,9 @@ const Navigation: React.FC = () => {
   return (
     <ConfigProvider
       theme={{
+        token: {
+          fontFamily: "Plus Jakarta Sans",
+        },
         algorithm:
           mode == "dark" ? theme.darkAlgorithm : theme.compactAlgorithm,
       }}
@@ -41,6 +45,7 @@ const Navigation: React.FC = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/track" element={<TrackingPage />} />
         <Route path="/admin" element={<Layout />}>
           <Route index element={<Navigate to="dashboard" />} />
           <Route path="dashboard" element={<DashboardPage />} />
@@ -55,7 +60,10 @@ const Navigation: React.FC = () => {
             <>
               <Route path="products" element={<ProductsPage />} />
               <Route path="products/manage" element={<ManageProduct />} />
-              <Route path="products/view/:productId" element={<ViewProduct />} />
+              <Route
+                path="products/view/:productId"
+                element={<ViewProduct />}
+              />
 
               <Route path="plans" element={<PlansPage />} />
               <Route path="plans/manage" element={<ManagePlan />} />

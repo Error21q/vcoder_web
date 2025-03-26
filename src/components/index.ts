@@ -15,7 +15,7 @@ import Uploader from "./Uploader";
 import Loader from "./Loader";
 import DataTableHead from "./DataTableHead";
 import BookingModal from "./BookingModal";
-import TrackingModal from "./TrackingModal";
+import TrackingStepper from "./TrackingStepper";
 import AlertDialogModal from "./AlertDialogModal";
 import ProductInfo from "./ProductInfo";
 import BookingInfo from "./BookingInfo";
@@ -41,7 +41,7 @@ export {
   Loader,
   DataTableHead,
   BookingModal,
-  TrackingModal,
+  TrackingStepper,
   AlertDialogModal,
   ProductInfo,
   BookingInfo,

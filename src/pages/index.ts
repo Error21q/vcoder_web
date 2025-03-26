@@ -11,6 +11,7 @@ import { ManageProduct } from "./products/manage";
 import { ManageBooking } from "./bookings/manage";
 import { ViewProduct } from "./products/view";
 import { ViewBooking } from "./bookings/view";
+import { TrackingPage } from "./tracking";
 
 export {
   HomePage,
@@ -26,4 +27,5 @@ export {
   ManageBooking,
   ViewProduct,
   ViewBooking,
+  TrackingPage,
 };

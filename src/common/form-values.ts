@@ -20,6 +20,7 @@ export const BlockchainInitialValues: IBlockchain = {
   logo: "",
   scan_url: "",
   rpc_url: "",
+  chain_id: "",
 };
 
 export const PlanInitialValues: IPlan = {

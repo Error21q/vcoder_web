@@ -7,6 +7,7 @@ import {
   Check,
   Close,
   Tag,
+  BlockOutlined,
 } from "@mui/icons-material";
 import { IBooking, IBookingInfo, IBookingStepper } from "../interfaces/booking";
 import { Chip, ColorPaletteProp, Typography } from "@mui/joy";
@@ -21,13 +22,15 @@ export type BookingStatusType =
   | "pending"
   | "approved"
   | "cancelled"
-  | "delivered";
+  | "delivered"
+  | "deactivated";
 
 export const BookingStatusColor: Record<BookingStatusType, ColorPaletteProp> = {
   pending: "warning",
   approved: "success",
   cancelled: "danger",
   delivered: "primary",
+  deactivated: "neutral",
 };
 
 export interface BookingAlertMetaInfo {
@@ -60,6 +63,12 @@ export const BookingStatuses = [
     value: "delivered",
     icon: <LocalShippingOutlined />,
     title: "Delivered",
+  },
+  {
+    id: 5,
+    value: "deactivated",
+    icon: <BlockOutlined />,
+    title: "Deactivated",
   },
 ];
 
@@ -238,32 +247,38 @@ export const getBookingStepper = (booking: IBooking) => {
   const is_approved: boolean = booking.status == "approved";
   const is_cancelled: boolean = booking.status == "cancelled";
   const is_delivered: boolean = booking.status == "delivered";
+  const is_deactivated: boolean = booking.status == "deactivated";
 
   const step3Icon =
-    is_approved || is_delivered ? (
+    is_approved || is_delivered || is_deactivated ? (
       <Check />
     ) : is_cancelled ? (
       <Close />
     ) : (
       <HourglassEmptyOutlined />
     );
-  const step3Color = is_approved
-    ? "success"
-    : is_delivered
-    ? "success"
-    : is_cancelled
-    ? "danger"
-    : "primary";
+  const step3Color =
+    is_approved || is_delivered || is_deactivated
+      ? "success"
+      : is_cancelled
+      ? "danger"
+      : "primary";
 
   const bookingInfo: IBookingStepper[] = [
     {
       title: "completed",
+      time: moment(booking.created_at).format(import.meta.env.VITE_TIME_STAMP),
       description: "Booked successfully",
       isCompleted: true,
     },
     {
       title: is_pending ? "in progress" : "completed",
       description: "Under review",
+      time: is_pending
+        ? ""
+        : moment(booking.approved_time || booking.cancel_time).format(
+            import.meta.env.VITE_TIME_STAMP
+          ),
       isCompleted: is_pending ? false : true,
       icon: is_pending && <FindInPageOutlined />,
       color: is_pending ? "primary" : "success",
@@ -271,7 +286,7 @@ export const getBookingStepper = (booking: IBooking) => {
     },
     {
       title:
-        is_approved || is_cancelled || is_delivered
+        is_approved || is_cancelled || is_delivered || is_deactivated
           ? "completed"
           : "in progress",
 
@@ -281,23 +296,54 @@ export const getBookingStepper = (booking: IBooking) => {
         ? "Rejected"
         : "Approved",
 
+      time:
+        is_approved || is_cancelled || is_delivered || is_deactivated
+          ? moment(booking.approved_time || booking.cancel_time).format(
+              import.meta.env.VITE_TIME_STAMP
+            )
+          : "",
+
       isCompleted:
-        is_approved || is_delivered ? true : is_cancelled ? false : false,
+        is_approved || is_delivered || is_deactivated
+          ? true
+          : is_cancelled
+          ? false
+          : false,
 
       icon: step3Icon,
       color: step3Color,
       variant:
-        is_approved || is_cancelled || is_delivered ? "solid" : "outlined",
+        is_approved || is_cancelled || is_delivered || is_deactivated
+          ? "solid"
+          : "outlined",
     },
     {
-      title: is_delivered ? "completed" : "",
+      title: is_delivered || is_deactivated ? "completed" : "",
       description: "Delivered",
-      isCompleted: is_delivered ? true : false,
-      icon: is_delivered ? <Check /> : <LocalShippingOutlined />,
-      color: is_delivered ? "success" : "primary",
-      variant: is_delivered ? "solid" : "outlined",
+      time:
+        is_delivered || is_deactivated
+          ? moment(booking.deliver_time).format(import.meta.env.VITE_TIME_STAMP)
+          : "",
+      isCompleted: is_delivered || is_deactivated ? true : false,
+      icon:
+        is_delivered || is_deactivated ? <Check /> : <LocalShippingOutlined />,
+      color: is_delivered || is_deactivated ? "success" : "primary",
+      variant: is_delivered || is_deactivated ? "solid" : "outlined",
+    },
+    {
+      title: "Deactivated",
+      description: "Deactivated",
+      time: is_deactivated
+        ? moment(booking.deactivate_time).format(
+            import.meta.env.VITE_TIME_STAMP
+          )
+        : "",
+      isCompleted: is_deactivated,
+      icon: <BlockOutlined />,
+      color: "neutral",
+      variant: "solid",
     },
   ];
 
-  return bookingInfo;
+  return is_deactivated ? bookingInfo : bookingInfo.slice(0, -1);
 };

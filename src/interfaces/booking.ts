@@ -19,9 +19,9 @@ export interface IBooking {
   status?: BookingStatusType | null;
   approved_time?: string | null;
   deliver_time?: string | null;
+  deactivate_time?: string | null;
   cancel_time?: string | null;
   cancel_reason?: string | null;
-  delivery_date?: string | null;
   created_at?: string;
   updated_at?: string;
   product: IProduct;
@@ -57,6 +57,7 @@ export interface IBookingInfo {
 export interface IBookingStepper {
   title: string;
   description: string;
+  time?: string;
   isCompleted?: boolean;
   icon?: React.ReactNode;
   variant?: VariantProp;

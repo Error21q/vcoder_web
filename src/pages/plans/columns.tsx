@@ -5,31 +5,31 @@ import moment from "moment";
 export const Columns: TableColumnsType<IPlan> = [
   {
     title: "Name",
-    width: 200,
+    width: 150,
     dataIndex: "name",
     key: "name",
   },
   {
     title: "ROI (%)",
-    width: 200,
+    width: 100,
     dataIndex: "roi",
     key: "roi",
   },
   {
     title: "Referral (%)",
-    width: 200,
+    width: 100,
     dataIndex: "referral",
     key: "referral",
   },
   {
     title: "Level(s)",
-    width: 200,
+    width: 100,
     dataIndex: "level",
     key: "level",
   },
   {
     title: "Description",
-    width: 200,
+    width: 300,
     dataIndex: "description",
     key: "description",
   },

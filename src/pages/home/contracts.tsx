@@ -1,30 +1,22 @@
 import { Box, Button, Grid, Typography } from "@mui/joy";
-import {
-  BookingModal,
-  CardProduct,
-  Loader,
-  TrackingModal,
-} from "../../components";
+import { BookingModal, CardProduct, Loader } from "../../components";
 import { useEffect, useState } from "react";
 import { IProduct, IProductFilter } from "../../interfaces/product";
 import { getProduct, getProducts } from "../../api/products";
 import { IPaginate, IPagination } from "../../interfaces/pagination";
-import { getBooking, saveBooking } from "../../api/bookings";
-import { IBooking, IBookingStepper } from "../../interfaces/booking";
-import {
-  CheckOutlined,
-  ErrorOutline,
-  FindReplaceOutlined,
-} from "@mui/icons-material";
+import { saveBooking } from "../../api/bookings";
+import { IBooking } from "../../interfaces/booking";
+import { CheckOutlined, ErrorOutline, Search } from "@mui/icons-material";
 import { showSnackbar } from "../../components/SnackbarUtils";
 import {
   ProductFilterInitialValues,
   ProductInitialValues,
 } from "../../common/form-values";
 import { Empty } from "antd";
-import { getBookingStepper } from "../../common/booking-utils";
 import { uploadFile } from "../../api/storage";
 import Filters from "./filters";
+import { Link as RouterLink } from "react-router-dom";
+import { Link } from "@mui/joy";
 
 export const Contracts = () => {
   const [rows, setRows] = useState<IProduct[]>([]);
@@ -35,11 +27,9 @@ export const Contracts = () => {
   });
   const [initialLoading, setInitialLoading] = useState<boolean>(true);
   const [showError, setShowError] = useState<boolean>(false);
-  const [bookingSteps, setBookingSteps] = useState<IBookingStepper[]>([]);
   const [selectedProduct, setSelectedProduct] =
     useState<IProduct>(ProductInitialValues);
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [openTrackModal, setOpenTrackModal] = useState<boolean>(false);
   const [pagination, setPagination] = useState<IPagination>();
   const [paginate, setPaginate] = useState<IPaginate>({
     page: Number(import.meta.env.VITE_PAGINATION_PAGE),
@@ -65,24 +55,6 @@ export const Contracts = () => {
       }
       setInitialLoading(false);
       setPagination(response.pagination);
-    } catch (error) {
-      console.error(error);
-    }
-    setLoading(false);
-  };
-
-  const fetchBooking = async (bookingId: string) => {
-    setLoading(true);
-    try {
-      const response = await getBooking(bookingId);
-      if (!response.data) {
-        setShowError(true);
-        setBookingSteps([]);
-      } else {
-        setShowError(false);
-        const steps: IBookingStepper[] = getBookingStepper(response.data);
-        setBookingSteps(steps);
-      }
     } catch (error) {
       console.error(error);
     }
@@ -154,17 +126,21 @@ export const Contracts = () => {
           py: { md: 1, xs: 2 },
         }}
       >
-        <Button
-          onClick={() => {
-            setOpenTrackModal(true);
-          }}
-          variant="outlined"
-          color="primary"
-          size="lg"
-          startDecorator={<FindReplaceOutlined />}
+        <Link
+          component={RouterLink}
+          to={"/track"}
+          target="_blank"
+          underline="none"
         >
-          Track booking
-        </Button>
+          <Button
+            variant="outlined"
+            color="primary"
+            size="lg"
+            startDecorator={<Search />}
+          >
+            Track booking
+          </Button>
+        </Link>
 
         <Grid
           container
@@ -266,21 +242,6 @@ export const Contracts = () => {
         }}
         onSubmit={(values: IBooking, audioFile: File) => {
           handleSubmit(values, audioFile);
-        }}
-      />
-
-      <TrackingModal
-        open={openTrackModal}
-        loading={loading}
-        steps={bookingSteps}
-        showError={showError}
-        onSubmit={(bookingId: string) => {
-          fetchBooking(bookingId);
-        }}
-        onClose={() => {
-          setShowError(false);
-          setOpenTrackModal(false);
-          setBookingSteps([]);
         }}
       />
     </Box>

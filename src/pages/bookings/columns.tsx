@@ -21,7 +21,7 @@ const useColumns = (
   const columns: TableColumnsType<IBooking> = [
     {
       title: "Product Name",
-      width: 200,
+      width: 150,
       dataIndex: "product",
       key: "product",
       fixed: "left",
@@ -39,7 +39,11 @@ const useColumns = (
           <Link
             level="body-sm"
             component={RouterLink}
-            to={infoUrl ? infoUrl+record.booking_id : "view/" + record.booking_id}
+            to={
+              infoUrl
+                ? infoUrl + record.booking_id
+                : "view/" + record.booking_id
+            }
             underline="none"
             state={record}
           >
@@ -50,26 +54,26 @@ const useColumns = (
     },
     {
       title: "WhatsApp Number",
-      width: 200,
+      width: 150,
       dataIndex: "whatsapp_number",
       key: "whatsapp_number",
     },
     {
       title: "Wallet Address",
-      width: 200,
+      width: 150,
       dataIndex: "wallet_address",
       key: "wallet_address",
     },
     {
       title: "Email Address",
-      width: 200,
+      width: 150,
       dataIndex: "email_address",
       key: "email_address",
     },
 
     {
       title: "Contract address",
-      width: 200,
+      width: 150,
       dataIndex: "contract_address",
       key: "contract_address",
       render(value, record) {
@@ -92,7 +96,7 @@ const useColumns = (
     },
     {
       title: "Website",
-      width: 200,
+      width: 150,
       dataIndex: "domain_name",
       key: "domain_name",
       render(value) {
@@ -112,7 +116,7 @@ const useColumns = (
 
     {
       title: "Status",
-      width: 200,
+      width: 150,
       dataIndex: "status",
       key: "status",
       render(value) {
@@ -132,7 +136,7 @@ const useColumns = (
 
     {
       title: "Audio",
-      width: 400,
+      width: 300,
       dataIndex: "audio",
       key: "audio",
       render(value) {
@@ -145,7 +149,7 @@ const useColumns = (
                 ? "var(--joy-palette-neutral-100)"
                 : "var(--joy-palette-neutral-800)"
             }
-            style={{ boxShadow: "none" }}
+            style={{ boxShadow: "none", padding: 0 }}
           />
         );
       },
