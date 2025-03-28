@@ -9,7 +9,10 @@ export const AuthValidationSchema = yup.object().shape({
 export const BlockchainValidationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
   currency: yup.string().required("Currency is required"),
-  chain_id: yup.number().required("Chain ID is required"),
+  chain_id: yup
+    .number()
+    .typeError("Chain ID must be a number")
+    .required("Chain ID is required"),
   scan_url: yup
     .string()
     .required("Scan URL is required")

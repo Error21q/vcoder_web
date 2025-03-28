@@ -10,13 +10,14 @@ import {
   BlockOutlined,
 } from "@mui/icons-material";
 import { IBooking, IBookingInfo, IBookingStepper } from "../interfaces/booking";
-import { Chip, ColorPaletteProp, Typography } from "@mui/joy";
+import { Box, Chip, ColorPaletteProp, Typography } from "@mui/joy";
 import moment from "moment";
 import {
   defaultCountries,
   FlagImage,
   parseCountry,
 } from "react-international-phone";
+import { CopyToClipboardButton } from "../components";
 
 export type BookingStatusType =
   | "pending"
@@ -98,16 +99,24 @@ export const getBookingInfoLeftContent = (booking: IBooking) => {
 
   const bookingInfo: IBookingInfo[] = [
     {
-      title: <Typography level="title-sm">Booking ID</Typography>,
+      title: <Typography level="title-sm">Booking number</Typography>,
       value: (
-        <Chip
-          size="sm"
-          color="primary"
-          sx={{ textTransform: "uppercase", borderRadius: "sm" }}
-          startDecorator={<Tag />}
+        <Box
+          display={"flex"}
+          justifyContent={"flex-end"}
+          alignItems={"center"}
+          gap={1}
         >
-          {booking.booking_id}
-        </Chip>
+          <Chip
+            size="sm"
+            color="primary"
+            sx={{ textTransform: "uppercase", borderRadius: "sm" }}
+            startDecorator={<Tag />}
+          >
+            {booking.booking_id}
+          </Chip>
+          <CopyToClipboardButton text={booking.booking_id?.toString() || ""} />
+        </Box>
       ),
     },
 
@@ -130,7 +139,19 @@ export const getBookingInfoLeftContent = (booking: IBooking) => {
 
     {
       title: <Typography level="title-sm">Wallet address</Typography>,
-      value: <Typography level="body-sm">{booking.wallet_address}</Typography>,
+      value: (
+        <Box
+          display={"flex"}
+          justifyContent={"flex-end"}
+          alignItems={"center"}
+          gap={1}
+        >
+          <Typography level="body-sm">{booking.wallet_address}</Typography>
+          <CopyToClipboardButton
+            text={booking.wallet_address?.toString() || ""}
+          />
+        </Box>
+      ),
     },
 
     {
@@ -178,6 +199,14 @@ export const getBookingInfoLeftContent = (booking: IBooking) => {
 export const getBookingInfoRightContent = (booking: IBooking) => {
   const bookingInfo: IBookingInfo[] = [
     {
+      title: <Typography level="title-sm">Downline count</Typography>,
+      value: (
+        <Typography level="body-sm">
+          {booking.downline_count || "---"}
+        </Typography>
+      ),
+    },
+    {
       title: <Typography level="title-sm">Approved at</Typography>,
       value: (
         <Typography level="body-sm">
@@ -215,6 +244,18 @@ export const getBookingInfoRightContent = (booking: IBooking) => {
         <Typography level="body-sm">
           {moment(booking.deliver_time).isValid()
             ? moment(booking.deliver_time).format(
+                import.meta.env.VITE_TIME_STAMP
+              )
+            : "---"}
+        </Typography>
+      ),
+    },
+    {
+      title: <Typography level="title-sm">Deactivated at</Typography>,
+      value: (
+        <Typography level="body-sm">
+          {moment(booking.deactivate_time).isValid()
+            ? moment(booking.deactivate_time).format(
                 import.meta.env.VITE_TIME_STAMP
               )
             : "---"}

@@ -93,8 +93,11 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
                     <FormControl
                       error={Boolean(touched[field.name] && errors[field.name])}
                     >
-                      <FormLabel>{field.label}</FormLabel>
+                      <FormLabel required={field.required}>
+                        {field.label}
+                      </FormLabel>
                       <Autocomplete
+                        required={field.required}
                         placeholder={field.placeholder}
                         name={field.name}
                         slotProps={{
@@ -146,8 +149,11 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
                     <FormControl
                       error={Boolean(touched[field.name] && errors[field.name])}
                     >
-                      <FormLabel>{field.label}</FormLabel>
+                      <FormLabel required={field.required}>
+                        {field.label}
+                      </FormLabel>
                       <Select
+                        required={field.required}
                         color={
                           touched[field.name] && errors[field.name]
                             ? "danger"
@@ -208,10 +214,12 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
                   )
                 ) : field.name === "whatsapp_number" ? (
                   <>
-                    <FormLabel>{field.label}</FormLabel>
+                    <FormLabel required={field.required}>
+                      {field.label}
+                    </FormLabel>
                     <FastField
                       component={PhoneInput}
-                      required
+                      required={field.required}
                       name={field.name}
                       value={values[field.name]}
                       defaultCountry={values?.country_code}
@@ -246,8 +254,11 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
                   <FormControl
                     error={Boolean(touched[field.name] && errors[field.name])}
                   >
-                    <FormLabel>{field.label}</FormLabel>
+                    <FormLabel required={field.required}>
+                      {field.label}
+                    </FormLabel>
                     <Input
+                      required={field.required}
                       type={field.type}
                       name={field.name}
                       value={values[field.name]}

@@ -1,7 +1,7 @@
 import { TableColumnsType } from "antd";
 import { IBooking } from "../../interfaces/booking";
 import moment from "moment";
-import { Chip, Link, useColorScheme } from "@mui/joy";
+import { Chip, Link, Typography, useColorScheme } from "@mui/joy";
 import {
   BookingStatusColor,
   BookingStatuses,
@@ -11,6 +11,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { Launch } from "@mui/icons-material";
 import { IProduct } from "../../interfaces/product";
 import { AudioPlayer } from "react-audio-play";
+import { CopyToClipboardButton } from "../../components";
 
 const useColumns = (
   infoUrl?: string,
@@ -46,6 +47,11 @@ const useColumns = (
             }
             underline="none"
             state={record}
+            endDecorator={
+              <CopyToClipboardButton
+                text={record.booking_id?.toString() || ""}
+              />
+            }
           >
             {value}
           </Link>
@@ -63,6 +69,16 @@ const useColumns = (
       width: 150,
       dataIndex: "wallet_address",
       key: "wallet_address",
+      render(value) {
+        return (
+          <Typography
+            level="body-sm"
+            endDecorator={<CopyToClipboardButton text={value || ""} />}
+          >
+            {value}
+          </Typography>
+        );
+      },
     },
     {
       title: "Email Address",

@@ -20,6 +20,7 @@ import AlertDialogModal from "./AlertDialogModal";
 import ProductInfo from "./ProductInfo";
 import BookingInfo from "./BookingInfo";
 import PlanInfo from "./PlanInfo";
+import CopyToClipboardButton from "./CopyToClipboardButton";
 import { SnackbarProvider } from "./SnackbarProvider";
 import { SnackbarUtilsConfigurator } from "./SnackbarUtils";
 
@@ -46,6 +47,7 @@ export {
   ProductInfo,
   BookingInfo,
   PlanInfo,
+  CopyToClipboardButton,
   SnackbarProvider,
   SnackbarUtilsConfigurator,
 };

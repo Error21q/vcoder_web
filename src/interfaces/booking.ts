@@ -22,6 +22,7 @@ export interface IBooking {
   deactivate_time?: string | null;
   cancel_time?: string | null;
   cancel_reason?: string | null;
+  downline_count?: number | null;
   created_at?: string;
   updated_at?: string;
   product: IProduct;
