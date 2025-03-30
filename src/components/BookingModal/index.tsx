@@ -1,5 +1,4 @@
 import {
-  Alert,
   Button,
   Card,
   DialogActions,
@@ -18,7 +17,6 @@ import { BookingInputFields } from "../../common/form-fields";
 import { useRef, useState } from "react";
 import { FormikProps } from "formik";
 import { IBooking } from "../../interfaces/booking";
-import { ErrorOutlined } from "@mui/icons-material";
 import AudioRecorder from "../AudioRecorder";
 import { IProduct } from "../../interfaces/product";
 import { AudioPlayer } from "react-audio-play";
@@ -27,15 +25,13 @@ import { BookingValidationSchema } from "../../common/form-schema";
 interface BookingModalProps {
   open: boolean;
   loading?: boolean;
-  showError?: boolean;
   selectedProduct: IProduct;
   onClose: () => void;
   onSubmit: (values: IBooking, audioFile: File) => void;
 }
 
 const BookingModal = (props: BookingModalProps) => {
-  const { open, loading, showError, selectedProduct, onClose, onSubmit } =
-    props;
+  const { open, loading, selectedProduct, onClose, onSubmit } = props;
   const formikRef = useRef<FormikProps<any>>(null);
   const [audio, setAudio] = useState<File>();
 
@@ -120,16 +116,6 @@ const BookingModal = (props: BookingModalProps) => {
           </DialogContent>
 
           <Divider />
-
-          {showError && (
-            <Alert
-              startDecorator={<ErrorOutlined />}
-              variant="outlined"
-              color="danger"
-            >
-              This smart contract has been already booked, please book another.
-            </Alert>
-          )}
 
           <DialogActions
             buttonFlex={"0.1"}

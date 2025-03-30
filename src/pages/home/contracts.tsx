@@ -2,7 +2,7 @@ import { Box, Button, Grid, Typography } from "@mui/joy";
 import { BookingModal, CardProduct, Loader } from "../../components";
 import { useEffect, useState } from "react";
 import { IProduct, IProductFilter } from "../../interfaces/product";
-import { getProduct, getProducts } from "../../api/products";
+import { getProducts } from "../../api/products";
 import { IPaginate, IPagination } from "../../interfaces/pagination";
 import { saveBooking } from "../../api/bookings";
 import { IBooking } from "../../interfaces/booking";
@@ -26,7 +26,6 @@ export const Contracts = () => {
     status: "available",
   });
   const [initialLoading, setInitialLoading] = useState<boolean>(true);
-  const [showError, setShowError] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] =
     useState<IProduct>(ProductInitialValues);
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -80,25 +79,19 @@ export const Contracts = () => {
   const handleSubmit = async (values: IBooking, audioFile: File) => {
     setLoading(true);
     try {
-      const response = await getProduct(selectedProduct.id);
-      if (response.data?.status != "available") {
-        setShowError(true);
-      } else {
-        setShowError(false);
-        let payload: IBooking = values;
-        payload.product = selectedProduct;
-        payload.audio = await handleUpload(audioFile);
-        await saveBooking(payload);
-        await fetchProducts();
-        showSnackbar({
-          message: "Smart contract has been booked successfully.",
-          color: "success",
-          size: "lg",
-          open: true,
-          startDecorator: <CheckOutlined />,
-        });
-        setOpenModal(false);
-      }
+      let payload: IBooking = values;
+      payload.product = selectedProduct;
+      payload.audio = await handleUpload(audioFile);
+      await saveBooking(payload);
+      await fetchProducts();
+      showSnackbar({
+        message: "Smart contract has been booked successfully.",
+        color: "success",
+        size: "lg",
+        open: true,
+        startDecorator: <CheckOutlined />,
+      });
+      setOpenModal(false);
     } catch (error) {
       console.log(error);
     }
@@ -233,10 +226,8 @@ export const Contracts = () => {
       <BookingModal
         open={openModal}
         loading={loading}
-        showError={showError}
         selectedProduct={selectedProduct}
         onClose={() => {
-          setShowError(false);
           setSelectedProduct(ProductInitialValues);
           setOpenModal(false);
         }}
