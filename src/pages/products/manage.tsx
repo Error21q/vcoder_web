@@ -24,12 +24,17 @@ import { IProduct } from "../../interfaces/product";
 import { saveProduct } from "../../api/products";
 import { showSnackbar } from "../../components/SnackbarUtils";
 import { CheckOutlined } from "@mui/icons-material";
-import { Form } from "../../components";
+import { Form, Loader } from "../../components";
 import { deleteFile, uploadFile } from "../../api/storage";
-import { getFileName, isValidUrl } from "../../common/image-utils";
+import {
+  base64ToFile,
+  getFileName,
+  isValidUrl,
+} from "../../common/image-utils";
 import { IFileList } from "../../interfaces/file";
 import { UploadChangeParam } from "antd/es/upload";
 import { ProductStatuses } from "../../common/product-utils";
+import { getScreenshot } from "../../api/screenshot";
 
 export const ManageProduct = () => {
   const navigate = useNavigate();
@@ -37,6 +42,7 @@ export const ManageProduct = () => {
   const formikRef = useRef<FormikProps<any>>(null);
   const [plans, setPlans] = useState<IPlan[]>();
   const [blockchains, setBlockchains] = useState<IBlockchain[]>();
+  const [uploading, setUploading] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [fileList, setFileList] = useState<any[]>([]);
   let u_file_list: IFileList[] = [];
@@ -53,6 +59,18 @@ export const ManageProduct = () => {
         formikRef?.current?.setFieldValue("image", "");
       }
     }
+  };
+
+  const onImageCapture = async (url: string) => {
+    setUploading(true);
+    try {
+      const response: any = await getScreenshot(url);
+      const file: File = base64ToFile(response?.data?.screenshot, "image/png");
+      await handleUpload(file);
+    } catch (error) {
+      console.log(error);
+    }
+    setUploading(false);
   };
 
   const handleUpload = async (file: File) => {
@@ -153,8 +171,10 @@ export const ManageProduct = () => {
               blockchain={blockchains}
               plan={plans}
               onSubmit={(_) => _}
+              onImageCapture={async (url: string) => {
+                onImageCapture(url);
+              }}
             />
-
             <FormControl required>
               <FormLabel>Image</FormLabel>
               <Uploader
@@ -190,6 +210,31 @@ export const ManageProduct = () => {
           </CardActions>
         </CardOverflow>
       </Card>
+
+      {uploading && (
+        <Loader
+          text="Capturing & uploading screenshot..."
+          propsTypography={{
+            mx: 2,
+            level: "body-lg",
+          }}
+          propsBox={{
+            sx: {
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100vw",
+              height: "100vh",
+              backdropFilter: "blur(8px)",
+              backgroundColor: "rgba(0, 0, 0, 0.1)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 1,
+            },
+          }}
+        />
+      )}
     </Box>
   );
 };

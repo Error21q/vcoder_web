@@ -67,14 +67,19 @@ export const BookingSummaryInitialValues: IBookingSummary = {
   today_approved: 0,
   today_cancelled: 0,
   today_delivered: 0,
+  today_deactivated: 0,
+
   monthly_pending: 0,
   monthly_approved: 0,
   monthly_cancelled: 0,
   monthly_delivered: 0,
+  monthly_deactivated: 0,
+
   total_pending: 0,
   total_approved: 0,
   total_cancelled: 0,
   total_delivered: 0,
+  total_deactivated: 0,
 };
 
 export const ProductFilterInitialValues: IProductFilter = {

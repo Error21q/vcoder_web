@@ -31,8 +31,14 @@ const DataTable = <RecordType extends object>(
   props: DataTableProps<RecordType>
 ) => {
   const { styles } = useStyle();
-  const { columns, dataSource, paginate, hideIndexColumn, ...restProps } =
-    props;
+  const {
+    columns,
+    dataSource,
+    paginate,
+    hideIndexColumn,
+    loading,
+    ...restProps
+  } = props;
 
   const indexColumn: any = {
     title: "#",
@@ -70,7 +76,18 @@ const DataTable = <RecordType extends object>(
           }}
         />
       )}
-      loading={{ indicator: <Spin indicator={<LoadingOutlined spin />} /> }}
+      loading={
+        typeof loading === "boolean"
+          ? {
+              spinning: loading,
+              indicator: (
+                <Spin indicator={<LoadingOutlined spin />} size="large" />
+              ),
+              tip: "Fetching records...",
+              size: "large",
+            }
+          : loading
+      }
       {...restProps}
     />
   );

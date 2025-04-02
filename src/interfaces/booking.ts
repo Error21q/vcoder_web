@@ -33,16 +33,19 @@ export interface IBookingSummary {
   today_approved: number;
   today_cancelled: number;
   today_delivered: number;
+  today_deactivated: number;
 
   monthly_pending: number;
   monthly_approved: number;
   monthly_cancelled: number;
   monthly_delivered: number;
+  monthly_deactivated: number;
 
   total_pending: number;
   total_approved: number;
   total_cancelled: number;
   total_delivered: number;
+  total_deactivated: number;
 }
 
 export interface IBookingStats {

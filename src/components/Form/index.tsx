@@ -1,6 +1,7 @@
 import {
   Autocomplete,
   Box,
+  Button,
   CircularProgress,
   FormControl,
   FormHelperText,
@@ -17,6 +18,7 @@ import { IPlan } from "../../interfaces/plan";
 import { IForm } from "../../interfaces/form";
 import { IProduct } from "../../interfaces/product";
 import PhoneInput from "../PhoneInput";
+import { PhotoCameraOutlined } from "@mui/icons-material";
 
 interface FormProps {
   initialValues: any;
@@ -26,6 +28,7 @@ interface FormProps {
   onSearch?: (value: any) => void;
   onProductSelect?: (value: IProduct | undefined) => void;
   onCountrySelect?: (country_code: string) => void;
+  onImageCapture?: (url: string) => void;
   statuses?: any[];
   products?: IProduct[] | undefined;
   blockchain?: IBlockchain[] | undefined;
@@ -45,6 +48,7 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
     onSearch,
     onProductSelect,
     onCountrySelect,
+    onImageCapture,
     statuses,
     products,
     blockchain,
@@ -266,6 +270,20 @@ const Form = forwardRef<FormikProps<any> | null, FormProps>((props) => {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       sx={{ boxShadow: "none" }}
+                      endDecorator={
+                        field.name === "url" &&
+                        !Boolean(touched[field.name] && errors[field.name]) && (
+                          <Button
+                            type="submit"
+                            onClick={() => {
+                              onImageCapture?.(values[field.name]);
+                            }}
+                            startDecorator={<PhotoCameraOutlined />}
+                          >
+                            Capture
+                          </Button>
+                        )
+                      }
                     />
                     <FormHelperText>
                       {touched[field.name] && errors[field.name]
