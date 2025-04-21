@@ -49,15 +49,7 @@ export const ManageProduct = () => {
 
   const onImageChange = async (info: UploadChangeParam) => {
     if (info.file.status == "removed") {
-      const response = await deleteFile(
-        import.meta.env.VITE_FOLDER_PRODUCTS +
-          "/" +
-          getFileName(info.file.url || "")
-      );
-      if (response.status) {
-        setFileList([]);
-        formikRef?.current?.setFieldValue("image", "");
-      }
+      handleDelete(info);
     }
   };
 
@@ -66,11 +58,24 @@ export const ManageProduct = () => {
     try {
       const response: any = await getScreenshot(url);
       const file: File = base64ToFile(response?.data?.screenshot, "image/png");
+      await handleDelete();
       await handleUpload(file);
     } catch (error) {
       console.log(error);
     }
     setUploading(false);
+  };
+
+  const handleDelete = async (info?: UploadChangeParam) => {
+    const response = await deleteFile(
+      import.meta.env.VITE_FOLDER_PRODUCTS +
+        "/" +
+        getFileName(info?.file?.url || rowData?.image || "")
+    );
+    if (response.status) {
+      setFileList([]);
+      formikRef?.current?.setFieldValue("image", "");
+    }
   };
 
   const handleUpload = async (file: File) => {
