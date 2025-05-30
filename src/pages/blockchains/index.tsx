@@ -17,9 +17,11 @@ import { getBlockchains, removeBlockchain } from "../../api/blockchains";
 import { useNavigate } from "react-router-dom";
 import { IBlockchain } from "../../interfaces/blockchain";
 import { showSnackbar } from "../../components/SnackbarUtils";
+import { UserRole, useUserRole } from "../../common/auth-utils";
 
 export const BlockchainsPage = () => {
   const navigate = useNavigate();
+  const userRole = useUserRole();
   const [search, setSearch] = useState<string>("");
   const [rows, setRows] = useState<IBlockchain[]>([]);
   const [row, setRow] = useState<IBlockchain>();
@@ -45,7 +47,7 @@ export const BlockchainsPage = () => {
     width: "var(--Table-lastColumnWidth)",
     render: (_: any, record: IBlockchain) => (
       <Box sx={{ display: "flex", gap: 1 }}>
-        <Tooltip title="Edit item" variant="outlined" color="primary" arrow>
+        {userRole !== UserRole.SUPERVISOR && (<Tooltip title="Edit item" variant="outlined" color="primary" arrow>
           <IconButton
             size="sm"
             color="primary"
@@ -55,9 +57,9 @@ export const BlockchainsPage = () => {
           >
             <EditOutlined />
           </IconButton>
-        </Tooltip>
+        </Tooltip>)}
 
-        <Tooltip title="Remove item" variant="outlined" color="danger" arrow>
+        {userRole !== UserRole.DEVELOPER && userRole !== UserRole.SUPERVISOR && (<Tooltip title="Remove item" variant="outlined" color="danger" arrow>
           <IconButton
             size="sm"
             color="danger"
@@ -68,7 +70,7 @@ export const BlockchainsPage = () => {
           >
             <DeleteOutlined />
           </IconButton>
-        </Tooltip>
+        </Tooltip>)}
       </Box>
     ),
   };
@@ -119,6 +121,7 @@ export const BlockchainsPage = () => {
       <DataTableHead
         title="Blockchains"
         btnText="Add New"
+        disabled={userRole === UserRole.SUPERVISOR}
         onClick={async () => {
           navigate("manage");
         }}

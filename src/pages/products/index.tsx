@@ -21,10 +21,12 @@ import { showSnackbar } from "../../components/SnackbarUtils";
 import useColumns from "./columns";
 import Filters from "./filters";
 import { ProductFilterInitialValues } from "../../common/form-values";
+import { UserRole, useUserRole } from "../../common/auth-utils";
 
 export const ProductsPage = () => {
   const navigate = useNavigate();
   const columns = useColumns();
+  const userRole = useUserRole();
   const [filters, setFilters] = useState<IProductFilter>(
     ProductFilterInitialValues
   );
@@ -52,33 +54,35 @@ export const ProductsPage = () => {
     width: "var(--Table-lastColumnWidth)",
     render: (_: any, record: IProduct) => (
       <Box sx={{ display: "flex", gap: 1 }}>
-        <Tooltip
-          title={
-            record.status == "available"
-              ? "Mark as Not available"
-              : "Mark as Available"
-          }
-          variant="outlined"
-          color={record.status == "available" ? "danger" : "success"}
-          arrow
-        >
-          <IconButton
-            size="sm"
+        {userRole !== UserRole.DEVELOPER && userRole !== UserRole.SUPERVISOR &&(
+          <Tooltip
+            title={
+              record.status == "available"
+                ? "Mark as Not available"
+                : "Mark as Available"
+            }
+            variant="outlined"
             color={record.status == "available" ? "danger" : "success"}
-            onClick={() => {
-              let payload: IProduct = record;
-              payload.status =
-                record.status == "available" ? "notavailable" : "available";
-              onStatusUpdate(payload);
-            }}
+            arrow
           >
-            {record.status == "available" ? <Cancel /> : <CheckCircle />}
-          </IconButton>
-        </Tooltip>
+            <IconButton
+              size="sm"
+              color={record.status == "available" ? "danger" : "success"}
+              onClick={() => {
+                let payload: IProduct = record;
+                payload.status =
+                  record.status == "available" ? "notavailable" : "available";
+                onStatusUpdate(payload);
+              }}
+            >
+              {record.status == "available" ? <Cancel /> : <CheckCircle />}
+            </IconButton>
+          </Tooltip>
+        )}
 
-        <Divider orientation="vertical" />
+        {userRole !== UserRole.SUPERVISOR &&(<Divider orientation="vertical" />)}
 
-        <Tooltip title="Edit item" variant="outlined" color="primary" arrow>
+        {userRole !== UserRole.SUPERVISOR &&(<Tooltip title="Edit item" variant="outlined" color="primary" arrow>
           <IconButton
             size="sm"
             color="primary"
@@ -88,20 +92,22 @@ export const ProductsPage = () => {
           >
             <EditOutlined />
           </IconButton>
-        </Tooltip>
+        </Tooltip>)}
 
-        <Tooltip title="Remove item" variant="outlined" color="danger" arrow>
-          <IconButton
-            size="sm"
-            color="danger"
-            onClick={() => {
-              setRow(record);
-              setShowAlert(true);
-            }}
-          >
-            <DeleteOutlined />
-          </IconButton>
-        </Tooltip>
+        {userRole !== UserRole.DEVELOPER && userRole !== UserRole.SUPERVISOR &&(
+          <Tooltip title="Remove item" variant="outlined" color="danger" arrow>
+            <IconButton
+              size="sm"
+              color="danger"
+              onClick={() => {
+                setRow(record);
+                setShowAlert(true);
+              }}
+            >
+              <DeleteOutlined />
+            </IconButton>
+          </Tooltip>
+        )}
       </Box>
     ),
   };
@@ -171,6 +177,7 @@ export const ProductsPage = () => {
       <DataTableHead
         title="Products"
         btnText="Add New"
+        disabled={userRole === UserRole.SUPERVISOR}
         onClick={() => {
           navigate("manage");
         }}

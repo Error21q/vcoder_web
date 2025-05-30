@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 export enum UserRole {
   ADMIN = "ADMIN",
   MANAGER = "MANAGER",
+  DEVELOPER = "DEVELOPER",
+  SUPERVISOR = "SUPERVISOR",
 }
 
 export const getAccessToken = () => {

@@ -17,9 +17,11 @@ import { getPlans, removePlan } from "../../api/plan";
 import { useNavigate } from "react-router-dom";
 import { IPlan } from "../../interfaces/plan";
 import { showSnackbar } from "../../components/SnackbarUtils";
+import { UserRole, useUserRole } from "../../common/auth-utils";
 
 export const PlansPage = () => {
   const navigate = useNavigate();
+  const userRole = useUserRole();
   const [search, setSearch] = useState<string>("");
   const [rows, setRows] = useState<IPlan[]>([]);
   const [row, setRow] = useState<IPlan>();
@@ -45,7 +47,7 @@ export const PlansPage = () => {
     width: "var(--Table-lastColumnWidth)",
     render: (_: any, record: IPlan) => (
       <Box sx={{ display: "flex", gap: 1 }}>
-        <Tooltip title="Edit item" variant="outlined" color="primary" arrow>
+        {userRole !== UserRole.SUPERVISOR && (<Tooltip title="Edit item" variant="outlined" color="primary" arrow>
           <IconButton
             size="sm"
             color="primary"
@@ -55,9 +57,9 @@ export const PlansPage = () => {
           >
             <EditOutlined />
           </IconButton>
-        </Tooltip>
+        </Tooltip>)}
 
-        <Tooltip title="Remove item" variant="outlined" color="danger" arrow>
+        {userRole !== UserRole.DEVELOPER && userRole !== UserRole.SUPERVISOR && (<Tooltip title="Remove item" variant="outlined" color="danger" arrow>
           <IconButton
             size="sm"
             color="danger"
@@ -68,7 +70,7 @@ export const PlansPage = () => {
           >
             <DeleteOutlined />
           </IconButton>
-        </Tooltip>
+        </Tooltip>)}
       </Box>
     ),
   };
@@ -119,6 +121,7 @@ export const PlansPage = () => {
       <DataTableHead
         title="Plans"
         btnText="Add New"
+        disabled={userRole === UserRole.SUPERVISOR}
         onClick={() => {
           navigate("manage");
         }}

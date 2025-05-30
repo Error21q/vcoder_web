@@ -72,6 +72,36 @@ const Navigation: React.FC = () => {
               <Route path="blockchains/manage" element={<ManageBlockchain />} />
             </>
           )}
+
+          {userRole === UserRole.DEVELOPER ? (
+            <Route path="*" element={<Navigate to="dashboard" />} />
+          ) : (
+            <>
+              <Route path="dashboard" element={<DashboardPage />} />
+
+              <Route path="bookings" element={<BookingsPage />} />
+              <Route path="bookings/manage" element={<ManageBooking />} />
+              <Route
+                path="bookings/view/:bookingId"
+                element={<ViewBooking />}
+              />
+            </>
+          )}
+
+          {userRole === UserRole.SUPERVISOR ? (
+            <Route path="*" element={<Navigate to="dashboard" />} />
+          ) : (
+            <>
+              <Route path="dashboard" element={<DashboardPage />} />
+
+              <Route path="bookings" element={<BookingsPage />} />
+              <Route path="bookings/manage" element={<ManageBooking />} />
+              <Route
+                path="bookings/view/:bookingId"
+                element={<ViewBooking />}
+              />
+            </>
+          )}
         </Route>
       </Routes>
     </ConfigProvider>

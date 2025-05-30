@@ -55,7 +55,7 @@ export const DashboardPage = () => {
       </Card>
 
       <Grid container spacing={2} py={2}>
-        {userRole === UserRole.ADMIN &&
+        {(userRole === UserRole.ADMIN || userRole === UserRole.DEVELOPER || userRole === UserRole.MANAGER ) &&
           DashboardStats.map((card) => (
             <Grid key={card.id} xs={12} sm={6} md={3}>
               <CardClickable {...card} />

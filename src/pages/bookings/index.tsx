@@ -66,7 +66,7 @@ export const BookingsPage = () => {
       <Box sx={{ display: "flex", gap: 1 }}>
         <Box
           display={
-            record.status != "approved" && record.status != "delivered"
+            record.status != "approved" && record.status != "delivered" && userRole !== UserRole.DEVELOPER && userRole !== UserRole.SUPERVISOR
               ? "unset"
               : "none"
           }
@@ -98,7 +98,7 @@ export const BookingsPage = () => {
 
         <Box
           display={
-            record.status != "cancelled" && record.status != "delivered"
+            record.status != "cancelled" && record.status != "delivered" && userRole !== UserRole.DEVELOPER && userRole !== UserRole.SUPERVISOR
               ? "unset"
               : "none"
           }
@@ -130,7 +130,7 @@ export const BookingsPage = () => {
 
         <Box
           display={
-            userRole !== UserRole.MANAGER && record.status != "delivered"
+            userRole !== UserRole.MANAGER && record.status != "delivered" && userRole !== UserRole.SUPERVISOR
               ? "unset"
               : "none"
           }
@@ -160,9 +160,9 @@ export const BookingsPage = () => {
           </Tooltip>
         </Box>
 
-        {userRole !== UserRole.MANAGER && <Divider orientation="vertical" />}
+        {userRole !== UserRole.MANAGER && userRole !== UserRole.SUPERVISOR && <Divider orientation="vertical" />}
 
-        <Box display={userRole === UserRole.MANAGER ? "none" : "block"}>
+        <Box display={userRole === UserRole.MANAGER || userRole === UserRole.SUPERVISOR ? "none" : "block"}>
           <Tooltip title="Edit item" variant="outlined" color="primary" arrow>
             <IconButton
               size="sm"
@@ -269,7 +269,7 @@ export const BookingsPage = () => {
       <DataTableHead
         title="Bookings"
         btnText="Add New"
-        disabled={userRole === UserRole.MANAGER}
+        disabled={userRole === UserRole.MANAGER || userRole === UserRole.SUPERVISOR}
         onClick={() => {
           navigate("manage");
         }}
