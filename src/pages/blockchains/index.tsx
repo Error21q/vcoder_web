@@ -17,7 +17,13 @@ import { getBlockchains, removeBlockchain } from "../../api/blockchains";
 import { useNavigate } from "react-router-dom";
 import { IBlockchain } from "../../interfaces/blockchain";
 import { showSnackbar } from "../../components/SnackbarUtils";
-import { UserRole, useUserRole } from "../../common/auth-utils";
+import { useUserRole } from "../../common/auth-utils";
+import {
+  UserRole,
+  canEdit,
+  canDelete,
+  canAdd,
+} from "../../utils/blockchain-utils";
 
 export const BlockchainsPage = () => {
   const navigate = useNavigate();
@@ -47,30 +53,34 @@ export const BlockchainsPage = () => {
     width: "var(--Table-lastColumnWidth)",
     render: (_: any, record: IBlockchain) => (
       <Box sx={{ display: "flex", gap: 1 }}>
-        {userRole !== UserRole.SUPERVISOR && (<Tooltip title="Edit item" variant="outlined" color="primary" arrow>
-          <IconButton
-            size="sm"
-            color="primary"
-            onClick={() => {
-              navigate("manage", { state: record });
-            }}
-          >
-            <EditOutlined />
-          </IconButton>
-        </Tooltip>)}
+        {userRole && canEdit(userRole as unknown as UserRole) && (
+          <Tooltip title="Edit item" variant="outlined" color="primary" arrow>
+            <IconButton
+              size="sm"
+              color="primary"
+              onClick={() => {
+                navigate("manage", { state: record });
+              }}
+            >
+              <EditOutlined />
+            </IconButton>
+          </Tooltip>
+        )}
 
-        {userRole !== UserRole.DEVELOPER && userRole !== UserRole.SUPERVISOR && (<Tooltip title="Remove item" variant="outlined" color="danger" arrow>
-          <IconButton
-            size="sm"
-            color="danger"
-            onClick={() => {
-              setRow(record);
-              setShowAlert(true);
-            }}
-          >
-            <DeleteOutlined />
-          </IconButton>
-        </Tooltip>)}
+        {userRole && canDelete(userRole as unknown as UserRole) && (
+          <Tooltip title="Remove item" variant="outlined" color="danger" arrow>
+            <IconButton
+              size="sm"
+              color="danger"
+              onClick={() => {
+                setRow(record);
+                setShowAlert(true);
+              }}
+            >
+              <DeleteOutlined />
+            </IconButton>
+          </Tooltip>
+        )}
       </Box>
     ),
   };
@@ -121,7 +131,7 @@ export const BlockchainsPage = () => {
       <DataTableHead
         title="Blockchains"
         btnText="Add New"
-        disabled={userRole === UserRole.SUPERVISOR}
+        disabled={!userRole || !canAdd(userRole as unknown as UserRole)}
         onClick={async () => {
           navigate("manage");
         }}

@@ -22,6 +22,12 @@ import useColumns from "./columns";
 import Filters from "./filters";
 import { ProductFilterInitialValues } from "../../common/form-values";
 import { UserRole, useUserRole } from "../../common/auth-utils";
+import {
+  canToggleStatus,
+  canEdit,
+  canDelete,
+  canAdd,
+} from "../../utils/product-utils";
 
 export const ProductsPage = () => {
   const navigate = useNavigate();
@@ -54,7 +60,7 @@ export const ProductsPage = () => {
     width: "var(--Table-lastColumnWidth)",
     render: (_: any, record: IProduct) => (
       <Box sx={{ display: "flex", gap: 1 }}>
-        {userRole !== UserRole.DEVELOPER && userRole !== UserRole.SUPERVISOR &&(
+        {userRole && canToggleStatus(userRole as UserRole) && (
           <Tooltip
             title={
               record.status == "available"
@@ -80,21 +86,25 @@ export const ProductsPage = () => {
           </Tooltip>
         )}
 
-        {userRole !== UserRole.SUPERVISOR &&(<Divider orientation="vertical" />)}
+        {userRole && canEdit(userRole as UserRole) && (
+          <Divider orientation="vertical" />
+        )}
 
-        {userRole !== UserRole.SUPERVISOR &&(<Tooltip title="Edit item" variant="outlined" color="primary" arrow>
-          <IconButton
-            size="sm"
-            color="primary"
-            onClick={() => {
-              navigate("manage", { state: record });
-            }}
-          >
-            <EditOutlined />
-          </IconButton>
-        </Tooltip>)}
+        {userRole && canEdit(userRole as UserRole) && (
+          <Tooltip title="Edit item" variant="outlined" color="primary" arrow>
+            <IconButton
+              size="sm"
+              color="primary"
+              onClick={() => {
+                navigate("manage", { state: record });
+              }}
+            >
+              <EditOutlined />
+            </IconButton>
+          </Tooltip>
+        )}
 
-        {userRole !== UserRole.DEVELOPER && userRole !== UserRole.SUPERVISOR &&(
+        {userRole && canDelete(userRole as UserRole) && (
           <Tooltip title="Remove item" variant="outlined" color="danger" arrow>
             <IconButton
               size="sm"
@@ -177,7 +187,7 @@ export const ProductsPage = () => {
       <DataTableHead
         title="Products"
         btnText="Add New"
-        disabled={userRole === UserRole.SUPERVISOR}
+        disabled={!userRole || !canAdd(userRole as UserRole)}
         onClick={() => {
           navigate("manage");
         }}

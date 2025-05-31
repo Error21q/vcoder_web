@@ -6,9 +6,10 @@ import { summaryBookings } from "../../api/bookings";
 import { IBookingSummary } from "../../interfaces/booking";
 import { UserRole, useUserRole } from "../../common/auth-utils";
 import { BookingSummaryInitialValues } from "../../common/form-values";
+import { canViewDashboardStats } from "../../utils/dashboard-utils";
 
 export const DashboardPage = () => {
-  const userRole = useUserRole();
+  const userRole = useUserRole() as UserRole | null;
   const [loading, setLoading] = useState<boolean>(false);
   const [bookingSummary, setBookingSummary] = useState<IBookingSummary>(
     BookingSummaryInitialValues
@@ -55,7 +56,7 @@ export const DashboardPage = () => {
       </Card>
 
       <Grid container spacing={2} py={2}>
-        {(userRole === UserRole.ADMIN || userRole === UserRole.DEVELOPER || userRole === UserRole.MANAGER ) &&
+        {canViewDashboardStats(userRole) &&
           DashboardStats.map((card) => (
             <Grid key={card.id} xs={12} sm={6} md={3}>
               <CardClickable {...card} />

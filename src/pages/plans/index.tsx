@@ -17,7 +17,9 @@ import { getPlans, removePlan } from "../../api/plan";
 import { useNavigate } from "react-router-dom";
 import { IPlan } from "../../interfaces/plan";
 import { showSnackbar } from "../../components/SnackbarUtils";
-import { UserRole, useUserRole } from "../../common/auth-utils";
+import { useUserRole } from "../../common/auth-utils";
+import { canEdit, canDelete, canAdd } from "../../utils/plan-utils";
+import type { UserRole } from "../../common/auth-utils"; // Adjust the path if UserRole is defined elsewhere
 
 export const PlansPage = () => {
   const navigate = useNavigate();
@@ -47,30 +49,34 @@ export const PlansPage = () => {
     width: "var(--Table-lastColumnWidth)",
     render: (_: any, record: IPlan) => (
       <Box sx={{ display: "flex", gap: 1 }}>
-        {userRole !== UserRole.SUPERVISOR && (<Tooltip title="Edit item" variant="outlined" color="primary" arrow>
-          <IconButton
-            size="sm"
-            color="primary"
-            onClick={() => {
-              navigate("manage", { state: record });
-            }}
-          >
-            <EditOutlined />
-          </IconButton>
-        </Tooltip>)}
+        {userRole && canEdit(userRole as UserRole) && (
+          <Tooltip title="Edit item" variant="outlined" color="primary" arrow>
+            <IconButton
+              size="sm"
+              color="primary"
+              onClick={() => {
+                navigate("manage", { state: record });
+              }}
+            >
+              <EditOutlined />
+            </IconButton>
+          </Tooltip>
+        )}
 
-        {userRole !== UserRole.DEVELOPER && userRole !== UserRole.SUPERVISOR && (<Tooltip title="Remove item" variant="outlined" color="danger" arrow>
-          <IconButton
-            size="sm"
-            color="danger"
-            onClick={() => {
-              setRow(record);
-              setShowAlert(true);
-            }}
-          >
-            <DeleteOutlined />
-          </IconButton>
-        </Tooltip>)}
+        {userRole && canDelete(userRole as UserRole) && (
+          <Tooltip title="Remove item" variant="outlined" color="danger" arrow>
+            <IconButton
+              size="sm"
+              color="danger"
+              onClick={() => {
+                setRow(record);
+                setShowAlert(true);
+              }}
+            >
+              <DeleteOutlined />
+            </IconButton>
+          </Tooltip>
+        )}
       </Box>
     ),
   };
@@ -82,7 +88,7 @@ export const PlansPage = () => {
         search,
         paginate.page,
         paginate.limit,
-        sort,
+        sort
       );
       setRows(response.data);
       setPagination(response.pagination);
@@ -121,7 +127,7 @@ export const PlansPage = () => {
       <DataTableHead
         title="Plans"
         btnText="Add New"
-        disabled={userRole === UserRole.SUPERVISOR}
+        disabled={!userRole || !canAdd(userRole as UserRole)}
         onClick={() => {
           navigate("manage");
         }}
@@ -152,7 +158,7 @@ export const PlansPage = () => {
           setSort(
             sorter.booking == undefined
               ? import.meta.env.VITE_DEFAULT_SORT
-              : sorter.columnKey + "," + sorter.booking,
+              : sorter.columnKey + "," + sorter.booking
           );
         }}
       />

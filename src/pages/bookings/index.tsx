@@ -30,7 +30,15 @@ import { FormikProps } from "formik";
 import { BookingActionInitialValues } from "../../common/form-values";
 import { getDynamicBookingActionValidationSchema } from "../../common/form-schema";
 import { BookingActionInputFields } from "../../common/form-fields";
-import { UserRole, useUserRole } from "../../common/auth-utils";
+import { useUserRole } from "../../common/auth-utils";
+import {
+  canApprove,
+  canCancel,
+  canDeliver,
+  canEdit,
+  canDelete,
+  canAdd,
+} from "../../utils/booking-utils";
 
 export const BookingsPage = () => {
   const navigate = useNavigate();
@@ -64,105 +72,102 @@ export const BookingsPage = () => {
     width: "var(--Table-lastColumnWidth)",
     render: (_: any, record: IBooking) => (
       <Box sx={{ display: "flex", gap: 1 }}>
-        <Box
-          display={
-            record.status != "approved" && record.status != "delivered" && userRole !== UserRole.DEVELOPER && userRole !== UserRole.SUPERVISOR
-              ? "unset"
-              : "none"
-          }
-        >
-          <Tooltip title="Approve" variant="outlined" color="success" arrow>
-            <IconButton
-              size="sm"
-              color="success"
-              onClick={() => {
-                setAlertMeta(
-                  BookingAlertMeta.find((item) => item.status == "approved")
-                );
-                setAlertConfirm({
-                  color: "success",
-                  onClick: () =>
-                    onUpdate({
-                      ...record,
-                      status: "approved",
-                      approved_time: new Date().toISOString(),
-                    }),
-                });
-                setShowAlert(true);
-              }}
-            >
-              <CheckCircleRounded />
-            </IconButton>
-          </Tooltip>
-        </Box>
+        {/* Approve */}
+        {userRole &&
+          canApprove(userRole as any) &&
+          record.status != "approved" &&
+          record.status != "delivered" && (
+            <Tooltip title="Approve" variant="outlined" color="success" arrow>
+              <IconButton
+                size="sm"
+                color="success"
+                onClick={() => {
+                  setAlertMeta(
+                    BookingAlertMeta.find((item) => item.status == "approved")
+                  );
+                  setAlertConfirm({
+                    color: "success",
+                    onClick: () =>
+                      onUpdate({
+                        ...record,
+                        status: "approved",
+                        approved_time: new Date().toISOString(),
+                      }),
+                  });
+                  setShowAlert(true);
+                }}
+              >
+                <CheckCircleRounded />
+              </IconButton>
+            </Tooltip>
+          )}
 
-        <Box
-          display={
-            record.status != "cancelled" && record.status != "delivered" && userRole !== UserRole.DEVELOPER && userRole !== UserRole.SUPERVISOR
-              ? "unset"
-              : "none"
-          }
-        >
-          <Tooltip title="Cancel" variant="outlined" color="danger" arrow>
-            <IconButton
-              size="sm"
-              color="danger"
-              onClick={() => {
-                setAlertMeta(
-                  BookingAlertMeta.find((item) => item.status == "cancelled")
-                );
-                setAlertConfirm({
-                  color: "danger",
-                  onClick: () =>
-                    onUpdate({
-                      ...record,
-                      status: "cancelled",
-                      cancel_time: new Date().toISOString(),
-                    }),
-                });
-                setShowAlert(true);
-              }}
-            >
-              <CancelRounded />
-            </IconButton>
-          </Tooltip>
-        </Box>
+        {/* Cancel */}
+        {userRole &&
+          canCancel(userRole as any) &&
+          record.status != "cancelled" &&
+          record.status != "delivered" && (
+            <Tooltip title="Cancel" variant="outlined" color="danger" arrow>
+              <IconButton
+                size="sm"
+                color="danger"
+                onClick={() => {
+                  setAlertMeta(
+                    BookingAlertMeta.find((item) => item.status == "cancelled")
+                  );
+                  setAlertConfirm({
+                    color: "danger",
+                    onClick: () =>
+                      onUpdate({
+                        ...record,
+                        status: "cancelled",
+                        cancel_time: new Date().toISOString(),
+                      }),
+                  });
+                  setShowAlert(true);
+                }}
+              >
+                <CancelRounded />
+              </IconButton>
+            </Tooltip>
+          )}
 
-        <Box
-          display={
-            userRole !== UserRole.MANAGER && record.status != "delivered" && userRole !== UserRole.SUPERVISOR
-              ? "unset"
-              : "none"
-          }
-        >
-          <Tooltip title="Deliver" variant="outlined" color="primary" arrow>
-            <IconButton
-              size="sm"
-              color="primary"
-              onClick={() => {
-                setAlertMeta(
-                  BookingAlertMeta.find((item) => item.status == "delivered")
-                );
-                setAlertConfirm({
-                  color: "primary",
-                  onClick: () =>
-                    onUpdate({
-                      ...record,
-                      status: "delivered",
-                      deliver_time: new Date().toISOString(),
-                    }),
-                });
-                setShowAlert(true);
-              }}
-            >
-              <LocalShippingRounded />
-            </IconButton>
-          </Tooltip>
-        </Box>
+        {/* Deliver */}
+        {userRole &&
+          canDeliver(userRole as any) &&
+          record.status != "delivered" && (
+            <Tooltip title="Deliver" variant="outlined" color="primary" arrow>
+              <IconButton
+                size="sm"
+                color="primary"
+                onClick={() => {
+                  setAlertMeta(
+                    BookingAlertMeta.find((item) => item.status == "delivered")
+                  );
+                  setAlertConfirm({
+                    color: "primary",
+                    onClick: () =>
+                      onUpdate({
+                        ...record,
+                        status: "delivered",
+                        deliver_time: new Date().toISOString(),
+                      }),
+                  });
+                  setShowAlert(true);
+                }}
+              >
+                <LocalShippingRounded />
+              </IconButton>
+            </Tooltip>
+          )}
 
-        {userRole !== UserRole.MANAGER && userRole !== UserRole.SUPERVISOR && <Divider orientation="vertical" />}
+        {userRole &&
+          (canEdit(userRole as any) || canDelete(userRole as any)) && (
+            <Divider orientation="vertical" />
+          )}
 
-        <Box display={userRole === UserRole.MANAGER || userRole === UserRole.SUPERVISOR ? "none" : "block"}>
+        {/* Edit */}
+        {userRole && canEdit(userRole as any) && (
           <Tooltip title="Edit item" variant="outlined" color="primary" arrow>
             <IconButton
               size="sm"
@@ -174,7 +179,10 @@ export const BookingsPage = () => {
               <EditOutlined />
             </IconButton>
           </Tooltip>
+        )}
 
+        {/* Remove */}
+        {userRole && canDelete(userRole as any) && (
           <Tooltip title="Remove item" variant="outlined" color="danger" arrow>
             <IconButton
               size="sm"
@@ -189,7 +197,7 @@ export const BookingsPage = () => {
               <DeleteOutlined />
             </IconButton>
           </Tooltip>
-        </Box>
+        )}
       </Box>
     ),
   };
@@ -269,7 +277,7 @@ export const BookingsPage = () => {
       <DataTableHead
         title="Bookings"
         btnText="Add New"
-        disabled={userRole === UserRole.MANAGER || userRole === UserRole.SUPERVISOR}
+        disabled={!userRole || !canAdd(userRole as any)}
         onClick={() => {
           navigate("manage");
         }}
